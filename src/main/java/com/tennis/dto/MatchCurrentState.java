@@ -1,14 +1,20 @@
 package com.tennis.dto;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Set;
+
 public class MatchCurrentState {
     private Integer playerOneId;
     private Integer playerTwoId;
     private Integer playerOneSets = 0;
     private Integer playerOneGames = 0;
     private String playerOnePoints = "0";
+    private ArrayList<Integer> playerOneSetsResult = new ArrayList<>();
     private Integer playerTwoSets = 0;
     private Integer playerTwoGames = 0;
     private String playerTwoPoints = "0";
+    private ArrayList<Integer> playerTwoSetsResult = new ArrayList<>();
     private boolean isMatchFinished = false;
     private boolean isDeuce = false;
     private Integer winnerId;
@@ -34,6 +40,14 @@ public class MatchCurrentState {
         return playerOnePoints;
     }
 
+    public Integer getPlayerOneSetsResult(int i) {
+        return playerOneSetsResult.get(i);
+    }
+
+    public ArrayList getPlayerOneSetsResultFull() {
+        return playerOneSetsResult;
+    }
+
     public Integer getPlayerTwoId() {
         return playerTwoId;
     }
@@ -48,6 +62,14 @@ public class MatchCurrentState {
 
     public String getPlayerTwoPoints() {
         return playerTwoPoints;
+    }
+
+    public Integer getPlayerTwoSetsResult(int i) {
+        return playerTwoSetsResult.get(i);
+    }
+
+    public ArrayList getPlayerTwoSetsResultFull() {
+        return playerTwoSetsResult;
     }
 
     public boolean isDeuce() {
@@ -78,6 +100,10 @@ public class MatchCurrentState {
         this.playerOnePoints = playerOnePoints;
     }
 
+    public void setPlayerOneSetsResult(Integer playerOneSetsResult) {
+        this.playerOneSetsResult.add(playerOneSetsResult);
+    }
+
     public void setPlayerTwoId(Integer playerTwoId) {
         this.playerTwoId = playerTwoId;
     }
@@ -92,6 +118,10 @@ public class MatchCurrentState {
 
     public void setPlayerTwoPoints(String playerTwoPoints) {
         this.playerTwoPoints = playerTwoPoints;
+    }
+
+    public void setPlayerTwoSetsResult(Integer playerTwoSetsResult) {
+        this.playerTwoSetsResult.add(playerTwoSetsResult);
     }
 
     public void setMatchFinished(boolean isMatchFinished) {

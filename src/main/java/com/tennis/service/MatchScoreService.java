@@ -102,36 +102,36 @@ public class MatchScoreService {
         Integer playerTwoSets = match.getPlayerTwoSets();
         if (match.getPlayerOneGames() == 6) {
             match.setPlayerOneSets(playerOneSets + 1);
+            match.setPlayerOneSetsResult(match.getPlayerOneGames());
+            match.setPlayerTwoSetsResult(match.getPlayerTwoGames());
+            System.out.println(match.getPlayerOneSetsResultFull());
+            System.out.println(match.getPlayerTwoSetsResultFull());
+            countSets(match);
             match.setPlayerOneGames(0);
             match.setPlayerTwoGames(0);
             return;
         }
         if (match.getPlayerTwoGames() == 6) {
             match.setPlayerTwoSets(playerTwoSets + 1);
+            match.setPlayerOneSetsResult(match.getPlayerOneGames());
+            match.setPlayerTwoSetsResult(match.getPlayerTwoGames());
+            System.out.println(match.getPlayerOneSetsResultFull());
+            System.out.println(match.getPlayerTwoSetsResultFull());
+            countSets(match);
             match.setPlayerOneGames(0);
             match.setPlayerTwoGames(0);
             return;
         }
-//        if (((match.getPlayerOneGames() - match.getPlayerTwoGames()) >= 2)) {
-//            match.setPlayerOneSets(playerOneSets + 1);
-//            return;
-//        }
-//        if (((match.getPlayerTwoGames() - match.getPlayerOneGames()) >= 2)) {
-//            match.setPlayerTwoSets(playerTwoSets + 1);
-//            return;
-//        }
     }
 
     public void countSets(MatchCurrentState match) {
         if (match.getPlayerOneSets() + match.getPlayerTwoSets() == 3) {
-            match.setMatchFinished(true);
             if (match.getPlayerOneSets() > match.getPlayerTwoSets()) {
                 match.setWinnerId(match.getPlayerOneId());
             } else {
                 match.setWinnerId(match.getPlayerTwoId());
             }
-        } else {
-
+            match.setMatchFinished(true);
         }
     }
 }

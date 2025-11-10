@@ -29,12 +29,20 @@ public class MatchScoreController extends HttpServlet {
         String playerOneName = playerDao.getPlayerById(currentMatch.getPlayerOneId()).getName();
         String playerTwoName = playerDao.getPlayerById(currentMatch.getPlayerTwoId()).getName();
 
-        request.setAttribute("matchId", matchId.toString());
-        request.setAttribute("currentMatch", currentMatch);
-        request.setAttribute("playerOneName", playerOneName);
-        request.setAttribute("playerTwoName", playerTwoName);
+        if (!currentMatch.isMatchFinished()) {
+            request.setAttribute("matchId", matchId.toString());
+            request.setAttribute("currentMatch", currentMatch);
+            request.setAttribute("playerOneName", playerOneName);
+            request.setAttribute("playerTwoName", playerTwoName);
+            request.getRequestDispatcher(JSPUtil.getJspPatch("match-score")).forward(request, response);
+        } else {
+            request.setAttribute("matchId", matchId.toString());
+            request.setAttribute("currentMatch", currentMatch);
+            request.setAttribute("playerOneName", playerOneName);
+            request.setAttribute("playerTwoName", playerTwoName);
+            request.getRequestDispatcher(JSPUtil.getJspPatch("match-winner")).forward(request, response);
 
-        request.getRequestDispatcher(JSPUtil.getJspPatch("match-score")).forward(request, response);
+        }
     }
 
     @Override

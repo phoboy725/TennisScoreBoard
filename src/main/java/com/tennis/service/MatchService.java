@@ -32,6 +32,8 @@ public class MatchService {
         MatchScoreService score = MatchScoreService.getInstance();
         if (!match.isMatchFinished()) {
             score.countPoints(match, scoreButtonId);
+        } else {
+
         }
     }
 
