@@ -17,6 +17,7 @@ public class MatchCurrentState {
     private ArrayList<Integer> playerTwoSetsResult = new ArrayList<>();
     private boolean isMatchFinished = false;
     private boolean isDeuce = false;
+    private boolean isTieBreak = false;
     private Integer winnerId;
 
     public MatchCurrentState(Integer playerOneId, Integer playerTwoId) {
@@ -80,6 +81,10 @@ public class MatchCurrentState {
         return isMatchFinished;
     }
 
+    public boolean isTieBreak() {
+        return isTieBreak;
+    }
+
     public Integer getWinnerId() {
         return winnerId;
     }
@@ -130,6 +135,10 @@ public class MatchCurrentState {
 
     public void setDeuce(boolean isDeuce) {
         this.isDeuce = isDeuce;
+    }
+
+    public void setTieBreak(boolean isTieBreak) {
+        this.isTieBreak = isTieBreak;
     }
 
     public void setWinnerId(Integer winnerId) {

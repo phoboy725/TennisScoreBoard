@@ -1,6 +1,7 @@
 package com.tennis.service;
 
 import com.tennis.dto.MatchCurrentState;
+import com.tennis.enums.TennisPoints;
 
 public class MatchScoreService {
 
@@ -10,17 +11,10 @@ public class MatchScoreService {
         return INSTANCE;
     }
 
-    private void countDispatch(MatchCurrentState match, Integer scoreButtonId) {
-        if (match.isMatchFinished())
-            if (match.isDeuce()) {
-                countPoints(    match, scoreButtonId);
-            }
-    }
-
     private String convertPointsToTennis(Integer from) {
         var to = switch (from) {
             case 0 -> "0";
-            case 1 -> "15";
+            case 1 -> TennisPoints.FIFTEEN.getDisplay();
             case 2 -> "30";
             case 3 -> "40";
             case 4 -> "AD";
@@ -97,26 +91,56 @@ public class MatchScoreService {
         }
     }
 
+    public void countTieBreak(MatchCurrentState match, Integer scoreButtonId) {
+        Integer playerOnePoints = Integer.parseInt(match.getPlayerOnePoints());
+        Integer playerTwoPoints = Integer.parseInt(match.getPlayerTwoPoints());
+        if ((playerOnePoints >= 7 || playerTwoPoints >= 7) && ((playerOnePoints - playerTwoPoints < Math.abs(2)))) {
+            if (playerOnePoints > playerTwoPoints) {
+                match.setPlayerOneSetsResult(match.getPlayerOneGames() + 1);
+                match.setPlayerTwoSetsResult(match.getPlayerTwoGames());
+            } else {
+                match.setPlayerOneSetsResult(match.getPlayerOneGames());
+                match.setPlayerTwoSetsResult(match.getPlayerTwoGames() + 1);
+            }
+            match.setPlayerOnePoints("0");
+            match.setPlayerTwoPoints("0");
+            match.setPlayerOneGames(0);
+            match.setPlayerTwoGames(0);
+            match.setTieBreak(false);
+        } else {
+            if (scoreButtonId == 1) {
+                match.setPlayerOnePoints(String.valueOf(playerOnePoints + 1));
+            }
+            if (scoreButtonId == 2) {
+                match.setPlayerTwoPoints(String.valueOf(playerTwoPoints + 1));
+            }
+        }
+
+    }
+
     public void countGames(MatchCurrentState match) {
         Integer playerOneSets = match.getPlayerOneSets();
         Integer playerTwoSets = match.getPlayerTwoSets();
-        if (match.getPlayerOneGames() == 6) {
+        Integer playerOneGames = match.getPlayerOneGames();
+        Integer playerTwoGames = match.getPlayerTwoGames();
+
+        if (playerOneGames == 6 && playerTwoGames == 6) {
+            match.setTieBreak(true);
+            return;
+        }
+        if (playerOneGames == 6 && ((playerOneGames - playerTwoGames) >= Math.abs(2))) {
             match.setPlayerOneSets(playerOneSets + 1);
-            match.setPlayerOneSetsResult(match.getPlayerOneGames());
-            match.setPlayerTwoSetsResult(match.getPlayerTwoGames());
-            System.out.println(match.getPlayerOneSetsResultFull());
-            System.out.println(match.getPlayerTwoSetsResultFull());
+            match.setPlayerOneSetsResult(playerOneGames);
+            match.setPlayerTwoSetsResult(playerTwoGames);
             countSets(match);
             match.setPlayerOneGames(0);
             match.setPlayerTwoGames(0);
             return;
         }
-        if (match.getPlayerTwoGames() == 6) {
+        if (match.getPlayerTwoGames() == 6 && playerOneGames <= 4) {
             match.setPlayerTwoSets(playerTwoSets + 1);
-            match.setPlayerOneSetsResult(match.getPlayerOneGames());
-            match.setPlayerTwoSetsResult(match.getPlayerTwoGames());
-            System.out.println(match.getPlayerOneSetsResultFull());
-            System.out.println(match.getPlayerTwoSetsResultFull());
+            match.setPlayerOneSetsResult(playerOneGames);
+            match.setPlayerTwoSetsResult(playerTwoGames);
             countSets(match);
             match.setPlayerOneGames(0);
             match.setPlayerTwoGames(0);

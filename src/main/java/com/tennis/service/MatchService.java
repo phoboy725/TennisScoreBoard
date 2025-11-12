@@ -31,9 +31,11 @@ public class MatchService {
         MatchCurrentState match = currentMatches.get(matchId);
         MatchScoreService score = MatchScoreService.getInstance();
         if (!match.isMatchFinished()) {
-            score.countPoints(match, scoreButtonId);
-        } else {
-
+            if (match.isTieBreak()) {
+                score.countTieBreak(match, scoreButtonId);
+            } else {
+                score.countPoints(match, scoreButtonId);
+            }
         }
     }
 
