@@ -21,10 +21,7 @@ public class NewMatchController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        long start = System.currentTimeMillis();
         request.getRequestDispatcher(JSPUtil.getJspPatch("new-match")).forward(request, response);
-        long end = System.currentTimeMillis();
-        System.out.println("createMatch took " + (end - start) + " ms");
     }
 
     @Override

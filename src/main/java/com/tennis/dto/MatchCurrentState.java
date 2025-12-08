@@ -41,13 +41,13 @@ public class MatchCurrentState {
         return playerOnePoints;
     }
 
-    public Integer getPlayerOneSetsResult(int i) {
-        return playerOneSetsResult.get(i);
+    public String getPlayerOneSetsResultSafe(int index) {
+        if (playerOneSetsResult == null || index < 0 || index >= playerOneSetsResult.size()) {
+            return "-";
+        }
+        return String.valueOf(playerOneSetsResult.get(index));
     }
 
-    public ArrayList getPlayerOneSetsResultFull() {
-        return playerOneSetsResult;
-    }
 
     public Integer getPlayerTwoId() {
         return playerTwoId;
@@ -65,12 +65,11 @@ public class MatchCurrentState {
         return playerTwoPoints;
     }
 
-    public Integer getPlayerTwoSetsResult(int i) {
-        return playerTwoSetsResult.get(i);
-    }
-
-    public ArrayList getPlayerTwoSetsResultFull() {
-        return playerTwoSetsResult;
+    public String getPlayerTwoSetsResultSafe(int index) {
+        if (playerTwoSetsResult == null || index < 0 || index >= playerTwoSetsResult.size()) {
+            return "-";
+        }
+        return String.valueOf(playerTwoSetsResult.get(index));
     }
 
     public boolean isDeuce() {
