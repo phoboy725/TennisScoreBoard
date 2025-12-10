@@ -10,6 +10,6 @@ public class FinishedMatchesPersistenceService {
     private static MatchesDao matchesDAO;
 
     public static List<Match> getAllMatchesFromDB() {
-        return matchesDAO.readAll();
+        return matchesDAO.readAll(1);
     }
 }

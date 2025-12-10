@@ -39,7 +39,7 @@
                     Start a new match
                 </button>
             </a>
-            <a class="homepage-action-button" href="#">
+            <a class="homepage-action-button" href="/matches">
                 <button class="btn view-results">
                     View match results
                 </button>

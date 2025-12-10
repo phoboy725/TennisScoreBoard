@@ -9,15 +9,63 @@ import java.util.List;
 
 public class MatchesDao {
 
+    private static final MatchesDao INSTANCE = new MatchesDao();
     private EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("Tennis");
-    private EntityManager entityManager = entityManagerFactory.createEntityManager();
 
-    public List<Match> readAll() {
-        List<Match> matches = entityManager.createQuery("SELECT m FROM match m " +
+    public static MatchesDao getInstance() {
+        return INSTANCE;
+    }
+
+    public List<Match> readAll(int offset) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        List<Match> matches = entityManager.createQuery("SELECT m FROM Match m " +
                                                             "JOIN FETCH m.playerOne  " +
                                                             "JOIN FETCH m.playerTwo  " +
-                                                            "JOIN FETCH m.winner").getResultList();
+                                                            "JOIN FETCH m.winner").setFirstResult(offset).setMaxResults(5).getResultList();
         entityManager.close();
         return matches;
+    }
+
+    public List<Match> findByPlayerName(String playerNameFilter, int offset) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        List<Match> matches = entityManager.createQuery("SELECT m FROM Match m " +
+                "JOIN FETCH m.playerOne  " +
+                "JOIN FETCH m.playerTwo  " +
+                "JOIN FETCH m.winner " +
+                        "WHERE LOWER(m.playerOne.name) LIKE LOWER(:name)" +
+                        "OR LOWER(m.playerTwo.name) LIKE LOWER(:name) " +
+                        "OR LOWER(m.winner.name) LIKE LOWER(:name)",
+                Match.class).setParameter("name", "%" + playerNameFilter + "%").
+                            setFirstResult(offset).
+                            setMaxResults(5).
+                            getResultList();
+        entityManager.close();
+        return matches;
+    }
+
+    public int countByPlayerName(String playerNameFilter) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        List<Match> matches = entityManager.createQuery("SELECT m FROM Match m " +
+                                "JOIN FETCH m.playerOne  " +
+                                "JOIN FETCH m.playerTwo  " +
+                                "JOIN FETCH m.winner " +
+                                "WHERE LOWER(m.playerOne.name) LIKE LOWER(:name)" +
+                                "OR LOWER(m.playerTwo.name) LIKE LOWER(:name) " +
+                                "OR LOWER(m.winner.name) LIKE LOWER(:name)",
+                        Match.class).setParameter("name", "%" + playerNameFilter + "%").
+                getResultList();
+        entityManager.close();
+        return matches.size();
+    }
+
+    public int countAll() {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        List<Match> matches = entityManager.createQuery("SELECT m FROM Match m " +
+                                "JOIN FETCH m.playerOne  " +
+                                "JOIN FETCH m.playerTwo  " +
+                                "JOIN FETCH m.winner ", Match.class).
+                getResultList();
+        entityManager.close();
+        return matches.size();
     }
 }

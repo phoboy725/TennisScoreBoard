@@ -36,12 +36,14 @@ public class MatchScoreController extends HttpServlet {
             request.setAttribute("playerTwoName", playerTwoName);
             request.getRequestDispatcher(JSPUtil.getJspPatch("match-score")).forward(request, response);
         } else {
+            String winnerName = playerDao.getPlayerById(currentMatch.getWinnerId()).getName();
             request.setAttribute("matchId", matchId.toString());
             request.setAttribute("currentMatch", currentMatch);
+            request.setAttribute("winnerName", winnerName);
             request.setAttribute("playerOneName", playerOneName);
             request.setAttribute("playerTwoName", playerTwoName);
             request.getRequestDispatcher(JSPUtil.getJspPatch("match-winner")).forward(request, response);
-
+            matchService.finishMatch(matchId);
         }
     }
 

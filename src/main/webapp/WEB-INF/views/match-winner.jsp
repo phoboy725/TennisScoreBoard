@@ -33,7 +33,7 @@
 </header>
 <main>
     <div class="container">
-        <h1>Current match is finished!!!</h1>
+        <h1>Current match is finished! The winner is ${winnerName} </h1>
         <div class="current-match-image"></div>
         <section class="score">
             <table class="table">
@@ -51,24 +51,24 @@
                     <td class="table-text">${currentMatch.getPlayerOneSetsResultSafe(0)}</td>
                     <td class="table-text">${currentMatch.getPlayerOneSetsResultSafe(1)}</td>
                     <td class="table-text">${currentMatch.getPlayerOneSetsResultSafe(2)}</td>
-<%--                    <td class="table-text">--%>
-<%--                        <form method="post" action="/match-score?uuid=${matchId}">--%>
-<%--                            <input type="hidden" name="scoreButtonId" value="1" />--%>
-<%--                            <button type="submit" class="score-btn">Score</button>--%>
-<%--                        </form>--%>
-<%--                    </td>--%>
+                    <%--                    <td class="table-text">--%>
+                    <%--                        <form method="post" action="/match-score?uuid=${matchId}">--%>
+                    <%--                            <input type="hidden" name="scoreButtonId" value="1" />--%>
+                    <%--                            <button type="submit" class="score-btn">Score</button>--%>
+                    <%--                        </form>--%>
+                    <%--                    </td>--%>
                 </tr>
                 <tr class="player2">
                     <td class="table-text">${playerTwoName}</td>
                     <td class="table-text">${currentMatch.getPlayerTwoSetsResultSafe(0)}</td>
                     <td class="table-text">${currentMatch.getPlayerTwoSetsResultSafe(1)}</td>
                     <td class="table-text">${currentMatch.getPlayerTwoSetsResultSafe(2)}</td>
-<%--                    <td class="table-text">--%>
-<%--                        <form method="post" action="/match-score?uuid=${matchId}">--%>
-<%--                            <input type="hidden" name="scoreButtonId" value="2" />--%>
-<%--                            <button type="submit" class="score-btn">Score</button>--%>
-<%--                        </form>--%>
-<%--                    </td>--%>
+                    <%--                    <td class="table-text">--%>
+                    <%--                        <form method="post" action="/match-score?uuid=${matchId}">--%>
+                    <%--                            <input type="hidden" name="scoreButtonId" value="2" />--%>
+                    <%--                            <button type="submit" class="score-btn">Score</button>--%>
+                    <%--                        </form>--%>
+                    <%--                    </td>--%>
                 </tr>
                 </tbody>
             </table>
@@ -77,7 +77,8 @@
 </main>
 <footer>
     <div class="footer">
-        <p>&copy; Tennis Scoreboard, project from <a href="https://zhukovsd.github.io/java-backend-learning-course/">zhukovsd/java-backend-learning-course</a> roadmap.</p>
+        <p>&copy; Tennis Scoreboard, project from <a href="https://zhukovsd.github.io/java-backend-learning-course/">zhukovsd/java-backend-learning-course</a>
+            roadmap.</p>
     </div>
 </footer>
 </body>

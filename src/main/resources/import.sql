@@ -1,5 +1,23 @@
 INSERT INTO player (name) VALUES ('Maria Sharapova');
 INSERT INTO player (name) VALUES ('Anna Kournikova');
+INSERT INTO player (name) VALUES ('Svetlana Kuznetsova');
+INSERT INTO player (name) VALUES ('Ekaterina Alexandrova');
+INSERT INTO player (name) VALUES ('Anastasia Pavlyuchenkova');
+INSERT INTO player (name) VALUES ('Veronika Kudermetova');
+INSERT INTO player (name) VALUES ('Elena Dementieva');
+INSERT INTO player (name) VALUES ('Daria Kasatkina');
 
 INSERT INTO match (playerOne, playerTwo, winner) VALUES (1, 2, 1);
 INSERT INTO match (playerOne, playerTwo, winner) VALUES (2, 1, 2);
+INSERT INTO match (playerOne, playerTwo, winner) VALUES (2, 3, 2);
+INSERT INTO match (playerOne, playerTwo, winner) VALUES (3, 2, 3);
+INSERT INTO match (playerOne, playerTwo, winner) VALUES (3, 4, 3);
+INSERT INTO match (playerOne, playerTwo, winner) VALUES (4, 3, 4);
+INSERT INTO match (playerOne, playerTwo, winner) VALUES (4, 5, 4);
+INSERT INTO match (playerOne, playerTwo, winner) VALUES (5, 4, 5);
+INSERT INTO match (playerOne, playerTwo, winner) VALUES (5, 6, 5);
+INSERT INTO match (playerOne, playerTwo, winner) VALUES (6, 5, 6);
+INSERT INTO match (playerOne, playerTwo, winner) VALUES (6, 7, 6);
+INSERT INTO match (playerOne, playerTwo, winner) VALUES (7, 6, 7);
+INSERT INTO match (playerOne, playerTwo, winner) VALUES (7, 8, 7);
+INSERT INTO match (playerOne, playerTwo, winner) VALUES (8, 7, 8);

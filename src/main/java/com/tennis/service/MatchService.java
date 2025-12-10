@@ -1,12 +1,18 @@
 package com.tennis.service;
 
 import com.tennis.dto.MatchCurrentState;
+import com.tennis.model.Match;
+import com.tennis.repositories.MatchesDao;
+import com.tennis.repositories.PlayerDao;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class MatchService {
+
+    private MatchesDao matchesDao = new MatchesDao();
 
     private static final MatchService INSTANCE = new MatchService();
     private Map<UUID, MatchCurrentState> currentMatches = new ConcurrentHashMap<>();
@@ -40,8 +46,21 @@ public class MatchService {
     }
 
     public void finishMatch(UUID matchId) {
-
         currentMatches.remove(matchId);
+    }
+
+    public List<Match> getMatches(String filterByPlayerName, int offset) {
+        if (filterByPlayerName != null && !filterByPlayerName.trim().isEmpty()) {
+            return matchesDao.findByPlayerName(filterByPlayerName, offset);
+        }
+        return matchesDao.readAll(offset);
+    }
+
+    public int getTotalMatchesCount(String filterByPlayerName) {
+        if (filterByPlayerName != null && !filterByPlayerName.trim().isEmpty()) {
+            return matchesDao.countByPlayerName(filterByPlayerName);
+        }
+        return matchesDao.countAll();
     }
 
 }
