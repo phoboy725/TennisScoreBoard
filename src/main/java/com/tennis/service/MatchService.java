@@ -2,6 +2,7 @@ package com.tennis.service;
 
 import com.tennis.dto.MatchCurrentState;
 import com.tennis.model.Match;
+import com.tennis.model.Player;
 import com.tennis.repositories.MatchesDao;
 import com.tennis.repositories.PlayerDao;
 
@@ -12,15 +13,14 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class MatchService {
 
-    private MatchesDao matchesDao = new MatchesDao();
+    private final MatchesDao matchesDao;
+    private final PlayerDao playerDao;
 
-    private static final MatchService INSTANCE = new MatchService();
-    private Map<UUID, MatchCurrentState> currentMatches = new ConcurrentHashMap<>();
+    private final Map<UUID, MatchCurrentState> currentMatches = new ConcurrentHashMap<>();
 
-    private MatchService() {}
-
-    public static MatchService getInstance() {
-        return INSTANCE;
+    public MatchService(MatchesDao matchesDao, PlayerDao playerDao) {
+        this.matchesDao = matchesDao;
+        this.playerDao = playerDao;
     }
 
     public MatchCurrentState getMatch(UUID matchId) {
@@ -46,6 +46,18 @@ public class MatchService {
     }
 
     public void finishMatch(UUID matchId) {
+
+        MatchCurrentState currentState = currentMatches.get(matchId);
+
+        Player playerOne = playerDao.getPlayerById(currentState.getPlayerOneId());
+        Player playerTwo = playerDao.getPlayerById(currentState.getPlayerTwoId());
+        Player winner = playerDao.getPlayerById(currentState.getWinnerId());
+
+        Match match = new Match();
+        match.setPlayerOne(playerOne);
+        match.setPlayerTwo(playerTwo);
+        match.setWinner(winner);
+        matchesDao.saveFinishedMatch(match);
         currentMatches.remove(matchId);
     }
 

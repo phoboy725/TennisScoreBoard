@@ -3,17 +3,15 @@ package com.tennis.repositories;
 import com.tennis.model.Player;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
 
 import java.util.List;
 
 public class PlayerDao {
 
-    private static final PlayerDao INSTANCE = new PlayerDao();
-    private static final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("Tennis");
+    private final EntityManagerFactory entityManagerFactory;
 
-    public static PlayerDao getInstance() {
-        return INSTANCE;
+    public PlayerDao(EntityManagerFactory entityManagerFactory) {
+        this.entityManagerFactory = entityManagerFactory;
     }
 
     public List<Player> getAll() {

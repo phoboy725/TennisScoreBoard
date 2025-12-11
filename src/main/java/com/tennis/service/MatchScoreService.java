@@ -192,8 +192,12 @@ public class MatchScoreService {
         if ((playerOnePoints >= 7 || playerTwoPoints >= 7) && (Math.abs(playerOnePoints - playerTwoPoints) >= 2)) {
             if (playerOnePoints > playerTwoPoints) {
                 incrementSets(match, 1);
+                saveSetsResults(match, 7, 1);
+                saveSetsResults(match, 6, 2);
             } else {
                 incrementSets(match, 2);
+                saveSetsResults(match, 7, 2);
+                saveSetsResults(match, 6, 1);
             }
             resetScore(match, "points");
             resetScore(match, "games");

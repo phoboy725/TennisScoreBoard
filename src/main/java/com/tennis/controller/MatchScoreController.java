@@ -1,5 +1,6 @@
 package com.tennis.controller;
 
+import com.tennis.config.ApplicationContext;
 import com.tennis.dto.MatchCurrentState;
 import com.tennis.model.Player;
 import com.tennis.repositories.PlayerDao;
@@ -18,8 +19,8 @@ import java.util.UUID;
 @WebServlet("/match-score")
 public class MatchScoreController extends HttpServlet {
 
-    private MatchService matchService = MatchService.getInstance();
-    private PlayerDao playerDao = PlayerDao.getInstance();
+    private final MatchService matchService = ApplicationContext.matchService();
+    private final PlayerDao playerDao = ApplicationContext.playerDao();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

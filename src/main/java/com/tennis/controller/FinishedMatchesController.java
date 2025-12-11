@@ -1,6 +1,7 @@
 package com.tennis.controller;
 
 
+import com.tennis.config.ApplicationContext;
 import com.tennis.model.Match;
 import com.tennis.repositories.MatchesDao;
 import com.tennis.service.MatchService;
@@ -18,7 +19,7 @@ import java.util.List;
 @WebServlet("/matches")
 public class FinishedMatchesController extends HttpServlet {
 
-    private MatchService matchService = MatchService.getInstance();
+    private final MatchService matchService = ApplicationContext.matchService();
     private static final int PAGE_SIZE = 5;
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {

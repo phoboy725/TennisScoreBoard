@@ -1,19 +1,21 @@
 package com.tennis.repositories;
 
+import com.tennis.config.ApplicationContext;
 import com.tennis.model.Match;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
 
 import java.util.List;
+import java.util.UUID;
 
 public class MatchesDao {
 
-    private static final MatchesDao INSTANCE = new MatchesDao();
-    private EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("Tennis");
+    private final EntityManagerFactory entityManagerFactory;
 
-    public static MatchesDao getInstance() {
-        return INSTANCE;
+    public MatchesDao(EntityManagerFactory entityManagerFactory) {
+        this.entityManagerFactory = entityManagerFactory;
     }
 
     public List<Match> readAll(int offset) {
@@ -67,5 +69,22 @@ public class MatchesDao {
                 getResultList();
         entityManager.close();
         return matches.size();
+    }
+
+    public void saveFinishedMatch(Match match) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        EntityTransaction entityTransaction = entityManager.getTransaction();
+        try {
+            entityTransaction.begin();
+            entityManager.persist(match);
+            entityTransaction.commit();
+        } catch (RuntimeException e) {
+            if (entityTransaction.isActive()) {
+                entityTransaction.rollback();
+            }
+            throw e;
+        } finally {
+            entityManager.close();
+        }
     }
 }
