@@ -8,7 +8,7 @@ public class Match {
     @Id
     @Column(name = "id", nullable = false, unique = true)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private int id;
 
     @ManyToOne
     @JoinColumn(name = "playerOne", referencedColumnName = "id")
@@ -30,7 +30,7 @@ public class Match {
 
     public Match() {}
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 

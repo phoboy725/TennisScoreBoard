@@ -1,5 +1,6 @@
 package com.tennis.repositories;
 
+import com.tennis.exception.DatabaseException;
 import com.tennis.model.Match;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -79,7 +80,7 @@ public class MatchesDao {
             if (entityTransaction.isActive()) {
                 entityTransaction.rollback();
             }
-            throw e;
+            throw new DatabaseException("Failed to save match " + match.getId(), e);
         } finally {
             entityManager.close();
         }

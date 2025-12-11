@@ -11,7 +11,7 @@ public class Player {
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private int id;
 
     @Column(name = "name", nullable = false, unique = true)
     @NotBlank(message = "Name cannot be empty")
@@ -26,7 +26,7 @@ public class Player {
 
     public Player(){}
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
@@ -34,7 +34,7 @@ public class Player {
         return name;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 

@@ -50,7 +50,7 @@ public class MatchScoreController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         UUID matchId = UUID.fromString(request.getParameter("uuid"));
-        Integer scoreButtonId = Integer.parseInt(request.getParameter("scoreButtonId"));
+        int scoreButtonId = Integer.parseInt(request.getParameter("scoreButtonId"));
         matchService.updateScore(matchId, scoreButtonId);
         response.sendRedirect("/match-score?uuid=" + matchId);
     }

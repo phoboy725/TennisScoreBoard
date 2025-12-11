@@ -1,6 +1,7 @@
 package com.tennis.service;
 
 import com.tennis.dto.MatchCurrentState;
+import com.tennis.exception.MatchNotFoundException;
 import com.tennis.model.Match;
 import com.tennis.model.Player;
 import com.tennis.repositories.MatchesDao;
@@ -24,7 +25,11 @@ public class MatchService {
     }
 
     public MatchCurrentState getMatch(UUID matchId) {
-        return currentMatches.get(matchId);
+        MatchCurrentState match = currentMatches.get(matchId);
+        if (match == null) {
+            throw new MatchNotFoundException("Match not found " + matchId);
+        }
+        return match;
     }
 
     public UUID createMatch(Integer playerOneId, Integer playerTwoId) {
@@ -35,7 +40,12 @@ public class MatchService {
 
     public void updateScore(UUID matchId, Integer scoreButtonId) {
         MatchCurrentState match = currentMatches.get(matchId);
+        if (match == null) {
+            throw new MatchNotFoundException("Match not found: " + matchId);
+        }
+
         MatchScoreService score = MatchScoreService.getInstance();
+
         if (!match.isMatchFinished()) {
             if (match.isTieBreak()) {
                 score.countTieBreak(match, scoreButtonId);
@@ -48,6 +58,13 @@ public class MatchService {
     public void finishMatch(UUID matchId) {
 
         MatchCurrentState currentState = currentMatches.get(matchId);
+        if (currentState == null) {
+            throw new MatchNotFoundException("Match not found: " + matchId);
+        }
+
+        if (!currentState.isMatchFinished() || currentState.getWinnerId() == null) {
+            return;
+        }
 
         Player playerOne = playerDao.getPlayerById(currentState.getPlayerOneId());
         Player playerTwo = playerDao.getPlayerById(currentState.getPlayerTwoId());

@@ -42,7 +42,7 @@ public class MatchScoreService {
     }
 
     // Подсчет Points
-    public void countPoints(MatchCurrentState match, Integer scoreButtonId) {
+    public void countPoints(MatchCurrentState match, int scoreButtonId) {
         int playerOnePoints = convertPointsFromTennis(match.getPlayerOnePoints());
         int playerTwoPoints = convertPointsFromTennis(match.getPlayerTwoPoints());
         if (playerOnePoints == 3 && playerTwoPoints == 3) {
@@ -60,8 +60,8 @@ public class MatchScoreService {
 
     // Подсчет Games
     public void countGames(MatchCurrentState match) {
-        Integer playerOneGames = match.getPlayerOneGames();
-        Integer playerTwoGames = match.getPlayerTwoGames();
+        int playerOneGames = match.getPlayerOneGames();
+        int playerTwoGames = match.getPlayerTwoGames();
         if (playerOneGames == 6 && playerTwoGames == 6) {
             match.setTieBreak(true);
         } else if (playerOneGames >= 6 && ((playerOneGames - playerTwoGames) >= 2)) {
@@ -72,7 +72,7 @@ public class MatchScoreService {
     }
 
     // Подсчет Deuce
-    public void countDeuce(MatchCurrentState match, Integer scoreButtonId) {
+    public void countDeuce(MatchCurrentState match, int scoreButtonId) {
         if (scoreButtonId == 1) {
             match.setPlayerOnePoints(ADV);
         }
@@ -82,7 +82,7 @@ public class MatchScoreService {
     }
 
     // Подсчет Advantage
-    public void countAdvantage(MatchCurrentState match, Integer scoreButtonId, Integer advPlayerId, Integer otherPlayerId) {
+    public void countAdvantage(MatchCurrentState match, int scoreButtonId, int advPlayerId, int otherPlayerId) {
         if (scoreButtonId == advPlayerId) {
             winGameAndResetPoints(match, scoreButtonId);
         } else if (scoreButtonId == otherPlayerId) {
@@ -128,7 +128,6 @@ public class MatchScoreService {
     public void checkAndFinishMatch(MatchCurrentState match) {
         int playerOneSets = match.getPlayerOneSets();
         int playerTwoSets = match.getPlayerTwoSets();
-
         if (playerOneSets == 2 || playerTwoSets == 2) {
             if (playerOneSets > playerTwoSets) {
                 match.setWinnerId(match.getPlayerOneId());
@@ -163,7 +162,7 @@ public class MatchScoreService {
     }
 
     // Победа в гейме (Games + 1) и обнуление Points
-    public void winGameAndResetPoints(MatchCurrentState match, Integer scoreButtonId) {
+    public void winGameAndResetPoints(MatchCurrentState match, int scoreButtonId) {
         if (scoreButtonId == 1) {
             incrementGames(match, 1);
         } else if (scoreButtonId == 2) {
@@ -173,7 +172,7 @@ public class MatchScoreService {
     }
 
     // Победа в сете (Sets + 1) и обнуление Games
-    public void winSetAndResetGames(MatchCurrentState match, Integer playerScored, Integer playerOneGames, Integer playerTwoGames) {
+    public void winSetAndResetGames(MatchCurrentState match, int playerScored, int playerOneGames, int playerTwoGames) {
         if (playerScored == 1) {
             incrementSets(match, 1);
         } else if (playerScored == 2) {
@@ -186,7 +185,7 @@ public class MatchScoreService {
     }
 
     //  Подсчет Tie-Break
-    public void countTieBreak(MatchCurrentState match, Integer scoreButtonId) {
+    public void countTieBreak(MatchCurrentState match, int scoreButtonId) {
         int playerOnePoints = Integer.parseInt(match.getPlayerOnePoints());
         int playerTwoPoints = Integer.parseInt(match.getPlayerTwoPoints());
         if ((playerOnePoints >= 7 || playerTwoPoints >= 7) && (Math.abs(playerOnePoints - playerTwoPoints) >= 2)) {
