@@ -1,14 +1,11 @@
 package com.tennis.repositories;
 
-import com.tennis.config.ApplicationContext;
 import com.tennis.model.Match;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
-import jakarta.persistence.Persistence;
 
 import java.util.List;
-import java.util.UUID;
 
 public class MatchesDao {
 

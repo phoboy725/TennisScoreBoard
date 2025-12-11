@@ -14,7 +14,6 @@ public class MatchCurrentState {
     private String playerTwoPoints = "0";
     private ArrayList<Integer> playerTwoSetsResult = new ArrayList<>();
     private boolean isMatchFinished = false;
-    private boolean isDeuce = false;
     private boolean isTieBreak = false;
     private Integer winnerId;
 
@@ -68,10 +67,6 @@ public class MatchCurrentState {
             return "-";
         }
         return String.valueOf(playerTwoSetsResult.get(index));
-    }
-
-    public boolean isDeuce() {
-        return isDeuce;
     }
 
     public boolean isMatchFinished() {
@@ -128,10 +123,6 @@ public class MatchCurrentState {
 
     public void setMatchFinished(boolean isMatchFinished) {
         this.isMatchFinished = isMatchFinished;
-    }
-
-    public void setDeuce(boolean isDeuce) {
-        this.isDeuce = isDeuce;
     }
 
     public void setTieBreak(boolean isTieBreak) {

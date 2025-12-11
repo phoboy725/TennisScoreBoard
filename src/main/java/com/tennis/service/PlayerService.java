@@ -18,7 +18,7 @@ public class PlayerService {
         if (player == null) {
             PlayerRequestDto playerRequestDto = new PlayerRequestDto(playerName);
             player = CreatePlayerMapper.INSTANCE.mapFrom(playerRequestDto);
-            playerDao.create(player);
+            playerDao.createPlayer(player);
         }
         return player;
     }

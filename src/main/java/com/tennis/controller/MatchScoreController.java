@@ -2,7 +2,6 @@ package com.tennis.controller;
 
 import com.tennis.config.ApplicationContext;
 import com.tennis.dto.MatchCurrentState;
-import com.tennis.model.Player;
 import com.tennis.repositories.PlayerDao;
 import com.tennis.service.MatchService;
 import com.tennis.util.JSPUtil;
@@ -12,7 +11,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import java.awt.*;
 import java.io.IOException;
 import java.util.UUID;
 
@@ -55,6 +53,5 @@ public class MatchScoreController extends HttpServlet {
         Integer scoreButtonId = Integer.parseInt(request.getParameter("scoreButtonId"));
         matchService.updateScore(matchId, scoreButtonId);
         response.sendRedirect("/match-score?uuid=" + matchId);
-
     }
 }

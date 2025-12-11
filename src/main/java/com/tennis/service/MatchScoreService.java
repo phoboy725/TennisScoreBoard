@@ -211,7 +211,6 @@ public class MatchScoreService {
                 match.setPlayerTwoPoints(String.valueOf(playerTwoPoints + 1));
             }
         }
-
     }
 }
 

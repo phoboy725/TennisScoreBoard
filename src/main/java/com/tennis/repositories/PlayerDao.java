@@ -14,12 +14,6 @@ public class PlayerDao {
         this.entityManagerFactory = entityManagerFactory;
     }
 
-    public List<Player> getAll() {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        List<Player> players = entityManager.createQuery("SELECT p FROM Player p", Player.class).getResultList();
-        return players;
-    }
-
     public Player getPlayerById(Integer id) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         List<Player> players = entityManager.createQuery("SELECT p FROM Player p WHERE p.id = :id", Player.class)
@@ -36,7 +30,7 @@ public class PlayerDao {
         return players.isEmpty() ? null : players.get(0);
     }
 
-    public void create(Player player) {
+    public void createPlayer(Player player) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         try {
             entityManager.getTransaction().begin();
@@ -50,6 +44,5 @@ public class PlayerDao {
         } finally {
             entityManager.close();
         }
-
     }
 }

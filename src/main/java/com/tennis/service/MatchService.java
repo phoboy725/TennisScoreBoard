@@ -74,6 +74,5 @@ public class MatchService {
         }
         return matchesDao.countAll();
     }
-
 }
 
