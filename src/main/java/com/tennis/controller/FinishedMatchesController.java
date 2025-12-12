@@ -26,8 +26,16 @@ public class FinishedMatchesController extends HttpServlet {
         String pageParam = request.getParameter("page");
         int currentPage = 1;
         if (pageParam != null && !pageParam.isEmpty()) {
-            currentPage = Integer.parseInt(pageParam);
+            try {
+                currentPage = Integer.parseInt(pageParam);
+                if (currentPage < 1) {
+                    currentPage = 1;
+                }
+            } catch (NumberFormatException e) {
+                currentPage = 1;
+            }
         }
+
         int offset = (currentPage - 1) * PAGE_SIZE;
 
         List<Match> matches = matchService.getMatches(filterByPlayerName, offset);

@@ -5,6 +5,7 @@ import com.tennis.dto.MatchCurrentState;
 import com.tennis.repositories.PlayerDao;
 import com.tennis.service.MatchService;
 import com.tennis.util.JSPUtil;
+import com.tennis.util.RequestParamUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -23,7 +24,11 @@ public class MatchScoreController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        UUID matchId = UUID.fromString(request.getParameter("uuid"));
+        UUID matchId = RequestParamUtil.getRequiredUuid(request, response, "uuid");
+        if (matchId == null) {
+            return;
+        }
+
         MatchCurrentState currentMatch = matchService.getMatch(matchId);
         String playerOneName = playerDao.getPlayerById(currentMatch.getPlayerOneId()).getName();
         String playerTwoName = playerDao.getPlayerById(currentMatch.getPlayerTwoId()).getName();
@@ -47,10 +52,18 @@ public class MatchScoreController extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        UUID matchId = UUID.fromString(request.getParameter("uuid"));
-        int scoreButtonId = Integer.parseInt(request.getParameter("scoreButtonId"));
+        UUID matchId = RequestParamUtil.getRequiredUuid(request, response, "uuid");
+        if (matchId == null) {
+            return;
+        }
+
+        Integer scoreButtonId = RequestParamUtil.getRequiredInt(request, response, "scoreButtonId");
+        if (scoreButtonId == null) {
+            return;
+        }
+
         matchService.updateScore(matchId, scoreButtonId);
         response.sendRedirect("/match-score?uuid=" + matchId);
     }

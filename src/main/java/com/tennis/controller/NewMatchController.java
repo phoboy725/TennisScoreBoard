@@ -18,7 +18,7 @@ import java.io.IOException;
 public class NewMatchController extends HttpServlet {
 
     private final PlayerDao playerDao = ApplicationContext.playerDao();
-    private MatchService matchService = ApplicationContext.matchService();
+    private final MatchService matchService = ApplicationContext.matchService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -34,7 +34,6 @@ public class NewMatchController extends HttpServlet {
         if (playerOneName.equalsIgnoreCase(playerTwoName)) {
             request.setAttribute("errorMessage", "Имена игроков должны быть уникальными");
             request.getRequestDispatcher(JSPUtil.getJspPatch("new-match")).forward(request, response);
-            return;
         } else {
             PlayerService playerService = new PlayerService(playerDao);
             Player playerOne = playerService.getOrCreatePlayer(playerOneName);
