@@ -8,16 +8,16 @@ public class PlayerNamesValidation {
 
     public static String check(String playerOneName, String playerTwoName) {
         if (playerOneName == null || playerTwoName == null) {
-            return  "Names must be 2 to 30 characters long, using only Latin letters";
+            return "Names must be 2 to 30 characters long, using only Latin letters";
         }
-        if (playerOneName.isEmpty() || playerTwoName.isEmpty()) {
+        if (playerOneName.trim().isEmpty() || playerTwoName.trim().isEmpty()) {
             return "Names must be 2 to 30 characters long, using only Latin letters";
         }
         if (playerOneName.equalsIgnoreCase(playerTwoName)) {
-            return  "Names must be unique";
+            return "Names must be unique";
         }
         if (!NAME_PATTERN.matcher(playerOneName).matches() || !NAME_PATTERN.matcher(playerTwoName).matches()) {
-            return  "Names must be 2 to 30 characters long, using only Latin letters";
+            return "Names must be 2 to 30 characters long, using only Latin letters";
         }
         return null;
     }

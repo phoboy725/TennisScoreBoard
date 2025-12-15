@@ -188,6 +188,15 @@ public class MatchScoreService {
     public void countTieBreak(MatchCurrentState match, int scoreButtonId) {
         int playerOnePoints = Integer.parseInt(match.getPlayerOnePoints());
         int playerTwoPoints = Integer.parseInt(match.getPlayerTwoPoints());
+
+        if (scoreButtonId == 1) {
+            playerOnePoints++;
+            match.setPlayerOnePoints(String.valueOf(playerOnePoints));
+        } else if (scoreButtonId == 2) {
+            playerTwoPoints++;
+            match.setPlayerTwoPoints(String.valueOf(playerTwoPoints));
+        }
+
         if ((playerOnePoints >= 7 || playerTwoPoints >= 7) && (Math.abs(playerOnePoints - playerTwoPoints) >= 2)) {
             if (playerOnePoints > playerTwoPoints) {
                 incrementSets(match, 1);
@@ -202,13 +211,6 @@ public class MatchScoreService {
             resetScore(match, "games");
             match.setTieBreak(false);
             checkAndFinishMatch(match);
-        } else {
-            if (scoreButtonId == 1) {
-                match.setPlayerOnePoints(String.valueOf(playerOnePoints + 1));
-            }
-            if (scoreButtonId == 2) {
-                match.setPlayerTwoPoints(String.valueOf(playerTwoPoints + 1));
-            }
         }
     }
 }
