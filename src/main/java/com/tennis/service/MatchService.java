@@ -59,7 +59,7 @@ public class MatchService {
 
         MatchCurrentState currentState = currentMatches.get(matchId);
         if (currentState == null) {
-            throw new MatchNotFoundException("Match not found: " + matchId);
+            return;
         }
 
         if (!currentState.isMatchFinished() || currentState.getWinnerId() == null) {
