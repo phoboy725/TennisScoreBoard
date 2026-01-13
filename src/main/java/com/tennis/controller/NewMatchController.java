@@ -1,7 +1,7 @@
 package com.tennis.controller;
 
 import com.tennis.config.ApplicationContext;
-import com.tennis.model.Player;
+import com.tennis.entity.Player;
 import com.tennis.repositories.PlayerDao;
 import com.tennis.service.MatchService;
 import com.tennis.service.PlayerService;
@@ -31,17 +31,6 @@ public class NewMatchController extends HttpServlet {
 
         String playerOneName = request.getParameter("playerOne");
         String playerTwoName = request.getParameter("playerTwo");
-
-//        if (playerOneName.equalsIgnoreCase(playerTwoName)) {
-//            request.setAttribute("errorMessage", "Имена игроков должны быть уникальными");
-//            request.getRequestDispatcher(JSPUtil.getJspPatch("new-match")).forward(request, response);
-//        } else {
-//            PlayerService playerService = new PlayerService(playerDao);
-//            Player playerOne = playerService.getOrCreatePlayer(playerOneName);
-//            Player playerTwo = playerService.getOrCreatePlayer(playerTwoName);
-//            String matchId = matchService.createMatch(playerOne.getId(), playerTwo.getId()).toString();
-//            response.sendRedirect("/match-score?uuid=" + matchId);
-//        }
 
         String checkPlayersNames = PlayerNamesValidation.check(playerOneName, playerTwoName);
 

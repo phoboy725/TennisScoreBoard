@@ -1,25 +1,25 @@
-package com.tennis.model;
+package com.tennis.entity;
 
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "match")
+@Table(name = "match_data")
 public class Match {
     @Id
-    @Column(name = "id", nullable = false, unique = true)
+    @Column(nullable = false, unique = true, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "playerOne", referencedColumnName = "id")
+    @JoinColumn(name = "player_one_id", referencedColumnName = "id", nullable = false)
     private Player playerOne;
 
     @ManyToOne
-    @JoinColumn(name = "playerTwo", referencedColumnName = "id")
+    @JoinColumn(name = "player_two_id", referencedColumnName = "id", nullable = false)
     private Player playerTwo;
 
     @ManyToOne
-    @JoinColumn(name = "winner", referencedColumnName = "id")
+    @JoinColumn(name = "winner_id", referencedColumnName = "id", nullable = false)
     private Player winner;
 
     public Match(Player playerOne, Player playerTwo, Player winner) {
@@ -30,7 +30,7 @@ public class Match {
 
     public Match() {}
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
@@ -60,10 +60,12 @@ public class Match {
 
     @Override
     public String toString() {
-        return "\nid ='" + id + '\'' +
-                ", playerOne ='" + playerOne.getId() + '\'' +
-                ", playerTwo ='" + playerTwo.getId() + '\'' +
-                ", winner ='" + winner.getId() + '\'' ;
+        return "Match{" +
+                "id=" + id +
+                ", playerOneId=" + playerOne.getId() +
+                ", playerTwoId=" + playerTwo.getId() +
+                ", winnerId=" + winner.getId() +
+                "}";
     }
 }
 

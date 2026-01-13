@@ -1,7 +1,7 @@
 package com.tennis.mapper;
 
 import com.tennis.dto.PlayerRequestDto;
-import com.tennis.model.Player;
+import com.tennis.entity.Player;
 
 public enum CreatePlayerMapper {
     INSTANCE;

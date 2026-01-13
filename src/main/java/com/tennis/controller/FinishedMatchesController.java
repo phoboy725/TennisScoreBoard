@@ -2,7 +2,7 @@ package com.tennis.controller;
 
 
 import com.tennis.config.ApplicationContext;
-import com.tennis.model.Match;
+import com.tennis.entity.Match;
 import com.tennis.service.MatchService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;

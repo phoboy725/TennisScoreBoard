@@ -2,7 +2,7 @@ package com.tennis.service;
 
 import com.tennis.dto.PlayerRequestDto;
 import com.tennis.mapper.CreatePlayerMapper;
-import com.tennis.model.Player;
+import com.tennis.entity.Player;
 import com.tennis.repositories.PlayerDao;
 
 public class PlayerService {

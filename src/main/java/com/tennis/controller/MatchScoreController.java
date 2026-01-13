@@ -30,6 +30,12 @@ public class MatchScoreController extends HttpServlet {
         }
 
         MatchCurrentState currentMatch = matchService.getMatch(matchId);
+
+        if (currentMatch == null) {
+            response.sendRedirect(request.getContextPath() + "/matches");
+            return;
+        }
+
         String playerOneName = playerDao.getPlayerById(currentMatch.getPlayerOneId()).getName();
         String playerTwoName = playerDao.getPlayerById(currentMatch.getPlayerTwoId()).getName();
 

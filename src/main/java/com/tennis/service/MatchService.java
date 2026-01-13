@@ -2,8 +2,8 @@ package com.tennis.service;
 
 import com.tennis.dto.MatchCurrentState;
 import com.tennis.exception.MatchNotFoundException;
-import com.tennis.model.Match;
-import com.tennis.model.Player;
+import com.tennis.entity.Match;
+import com.tennis.entity.Player;
 import com.tennis.repositories.MatchesDao;
 import com.tennis.repositories.PlayerDao;
 
@@ -25,14 +25,10 @@ public class MatchService {
     }
 
     public MatchCurrentState getMatch(UUID matchId) {
-        MatchCurrentState match = currentMatches.get(matchId);
-        if (match == null) {
-            throw new MatchNotFoundException("Match not found " + matchId);
-        }
-        return match;
+        return currentMatches.get(matchId);
     }
 
-    public UUID createMatch(Integer playerOneId, Integer playerTwoId) {
+    public UUID createMatch(Long playerOneId, Long playerTwoId) {
         UUID matchId = UUID.randomUUID();
         currentMatches.put(matchId, new MatchCurrentState(playerOneId, playerTwoId));
         return matchId;

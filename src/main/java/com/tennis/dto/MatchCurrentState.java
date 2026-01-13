@@ -3,8 +3,8 @@ package com.tennis.dto;
 import java.util.ArrayList;
 
 public class MatchCurrentState {
-    private int playerOneId;
-    private int playerTwoId;
+    private Long playerOneId;
+    private Long playerTwoId;
     private int playerOneSets = 0;
     private int playerOneGames = 0;
     private String playerOnePoints = "0";
@@ -15,14 +15,14 @@ public class MatchCurrentState {
     private ArrayList<Integer> playerTwoSetsResult = new ArrayList<>();
     private boolean isMatchFinished = false;
     private boolean isTieBreak = false;
-    private Integer winnerId;
+    private Long winnerId;
 
-    public MatchCurrentState(int playerOneId, int playerTwoId) {
+    public MatchCurrentState(Long playerOneId, Long playerTwoId) {
         this.playerOneId = playerOneId;
         this.playerTwoId = playerTwoId;
     }
 
-    public int getPlayerOneId() {
+    public Long getPlayerOneId() {
         return playerOneId;
     }
 
@@ -46,7 +46,7 @@ public class MatchCurrentState {
     }
 
 
-    public int getPlayerTwoId() {
+    public Long getPlayerTwoId() {
         return playerTwoId;
     }
 
@@ -77,11 +77,11 @@ public class MatchCurrentState {
         return isTieBreak;
     }
 
-    public Integer getWinnerId() {
+    public Long getWinnerId() {
         return winnerId;
     }
 
-    public void setPlayerOneId(int playerOneId) {
+    public void setPlayerOneId(Long playerOneId) {
         this.playerOneId = playerOneId;
     }
 
@@ -101,7 +101,7 @@ public class MatchCurrentState {
         this.playerOneSetsResult.add(playerOneSetsResult);
     }
 
-    public void setPlayerTwoId(int playerTwoId) {
+    public void setPlayerTwoId(Long playerTwoId) {
         this.playerTwoId = playerTwoId;
     }
 
@@ -129,7 +129,7 @@ public class MatchCurrentState {
         this.isTieBreak = isTieBreak;
     }
 
-    public void setWinnerId(Integer winnerId) {
+    public void setWinnerId(Long winnerId) {
         this.winnerId = winnerId;
     }
 }

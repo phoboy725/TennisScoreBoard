@@ -10,7 +10,7 @@ class MatchScoreServiceTest {
 
     @Test
     void player1WinsPointAt40_40_gameDoesNotEnd() {
-        MatchCurrentState match = new MatchCurrentState(1,2);
+        MatchCurrentState match = new MatchCurrentState(1L,2L);
         match.setPlayerOnePoints("40");
         match.setPlayerTwoPoints("40");
 
@@ -25,7 +25,7 @@ class MatchScoreServiceTest {
 
     @Test
     void player2WinsPointWhenPlayer1inAdvantage_Player1PointsReturnTo40() {
-        MatchCurrentState match = new MatchCurrentState(1,2);
+        MatchCurrentState match = new MatchCurrentState(1L,2L);
         match.setPlayerOnePoints("AD");
         match.setPlayerTwoPoints("40");
 
@@ -38,7 +38,7 @@ class MatchScoreServiceTest {
 
     @Test
     void player1WinsPointAt40_0_winsGame() {
-        MatchCurrentState match = new MatchCurrentState(1,2);
+        MatchCurrentState match = new MatchCurrentState(1L,2L);
         match.setPlayerOnePoints("40");
         match.setPlayerTwoPoints("0");
 
@@ -52,7 +52,7 @@ class MatchScoreServiceTest {
 
     @Test
     void tieBreakStartsAt6_6() {
-        MatchCurrentState match = new MatchCurrentState(1,2);
+        MatchCurrentState match = new MatchCurrentState(1L,2L);
         match.setPlayerOneGames(6);
         match.setPlayerTwoGames(6);
 
@@ -63,7 +63,7 @@ class MatchScoreServiceTest {
 
     @Test
     void tieBreakPlayer1Wins7_5() {
-        MatchCurrentState match = new MatchCurrentState(1,2);
+        MatchCurrentState match = new MatchCurrentState(1L,2L);
         match.setPlayerOneGames(6);
         match.setPlayerTwoGames(6);
         match.setTieBreak(true);
@@ -82,7 +82,7 @@ class MatchScoreServiceTest {
     @Test
     void playerWinsMatchWhenSetsEquals2() {
 
-        MatchCurrentState match = new MatchCurrentState(1,2);
+        MatchCurrentState match = new MatchCurrentState(1L,2L);
         match.setPlayerOneSets(1);
         match.setPlayerTwoSets(1);
 

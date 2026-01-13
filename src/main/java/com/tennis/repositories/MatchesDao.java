@@ -1,7 +1,7 @@
 package com.tennis.repositories;
 
 import com.tennis.exception.DatabaseException;
-import com.tennis.model.Match;
+import com.tennis.entity.Match;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
@@ -21,8 +21,13 @@ public class MatchesDao {
         List<Match> matches = entityManager.createQuery("SELECT m FROM Match m " +
                                                             "JOIN FETCH m.playerOne  " +
                                                             "JOIN FETCH m.playerTwo  " +
-                                                            "JOIN FETCH m.winner").setFirstResult(offset).setMaxResults(5).getResultList();
+                                                            "JOIN FETCH m.winner " +
+                                                            "ORDER BY m.id DESC")
+                                                            .setFirstResult(offset)
+                                                            .setMaxResults(5)
+                                                            .getResultList();
         entityManager.close();
+        System.out.println(matches);
         return matches;
     }
 
@@ -34,12 +39,14 @@ public class MatchesDao {
                 "JOIN FETCH m.winner " +
                         "WHERE LOWER(m.playerOne.name) LIKE LOWER(:name)" +
                         "OR LOWER(m.playerTwo.name) LIKE LOWER(:name) " +
-                        "OR LOWER(m.winner.name) LIKE LOWER(:name)",
+                        "OR LOWER(m.winner.name) LIKE LOWER(:name) " +
+                        "ORDER BY m.id DESC",
                 Match.class).setParameter("name", "%" + playerNameFilter + "%").
                             setFirstResult(offset).
                             setMaxResults(5).
                             getResultList();
         entityManager.close();
+        System.out.println(matches);
         return matches;
     }
 

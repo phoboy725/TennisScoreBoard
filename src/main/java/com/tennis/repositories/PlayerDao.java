@@ -1,6 +1,6 @@
 package com.tennis.repositories;
 
-import com.tennis.model.Player;
+import com.tennis.entity.Player;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 
@@ -14,7 +14,7 @@ public class PlayerDao {
         this.entityManagerFactory = entityManagerFactory;
     }
 
-    public Player getPlayerById(Integer id) {
+    public Player getPlayerById(Long id) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         List<Player> players = entityManager.createQuery("SELECT p FROM Player p WHERE p.id = :id", Player.class)
                 .setParameter("id", id)
