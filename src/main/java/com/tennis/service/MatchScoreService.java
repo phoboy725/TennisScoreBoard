@@ -141,10 +141,10 @@ public class MatchScoreService {
     // Сохранение результатов сетов
     public void saveSetsResults(MatchCurrentState match, int setResult, int playerId) {
         if (playerId == 1) {
-            match.setPlayerOneSetsResult(setResult);
+            match.addPlayerOneSetsResult(setResult);
         }
         if (playerId == 2) {
-            match.setPlayerTwoSetsResult(setResult);
+            match.addPlayerTwoSetsResult(setResult);
         }
     }
 

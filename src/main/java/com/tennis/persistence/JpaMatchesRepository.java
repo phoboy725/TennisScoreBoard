@@ -1,21 +1,23 @@
-package com.tennis.repositories;
+package com.tennis.persistence;
 
 import com.tennis.exception.DatabaseException;
 import com.tennis.entity.Match;
+import com.tennis.repository.MatchesRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 
 import java.util.List;
 
-public class MatchesDao {
+public class JpaMatchesRepository implements MatchesRepository {
 
     private final EntityManagerFactory entityManagerFactory;
 
-    public MatchesDao(EntityManagerFactory entityManagerFactory) {
+    public JpaMatchesRepository(EntityManagerFactory entityManagerFactory) {
         this.entityManagerFactory = entityManagerFactory;
     }
 
+    @Override
     public List<Match> readAll(int offset) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         List<Match> matches = entityManager.createQuery("SELECT m FROM Match m " +
@@ -31,7 +33,8 @@ public class MatchesDao {
         return matches;
     }
 
-    public List<Match> findByPlayerName(String playerNameFilter, int offset) {
+    @Override
+    public List<Match> findMatchesByPlayerName(String playerNameFilter, int offset) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         List<Match> matches = entityManager.createQuery("SELECT m FROM Match m " +
                 "JOIN FETCH m.playerOne  " +
@@ -50,7 +53,8 @@ public class MatchesDao {
         return matches;
     }
 
-    public int countByPlayerName(String playerNameFilter) {
+    @Override
+    public int countMatchesWithPlayerName(String playerNameFilter) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         List<Match> matches = entityManager.createQuery("SELECT m FROM Match m " +
                                 "JOIN FETCH m.playerOne  " +
@@ -65,6 +69,7 @@ public class MatchesDao {
         return matches.size();
     }
 
+    @Override
     public int countAll() {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         List<Match> matches = entityManager.createQuery("SELECT m FROM Match m " +
@@ -76,13 +81,15 @@ public class MatchesDao {
         return matches.size();
     }
 
-    public void saveFinishedMatch(Match match) {
+    @Override
+    public Match saveFinishedMatch(Match match) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         EntityTransaction entityTransaction = entityManager.getTransaction();
         try {
             entityTransaction.begin();
             entityManager.persist(match);
             entityTransaction.commit();
+            return match;
         } catch (RuntimeException e) {
             if (entityTransaction.isActive()) {
                 entityTransaction.rollback();

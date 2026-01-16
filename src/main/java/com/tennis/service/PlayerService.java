@@ -1,25 +1,22 @@
 package com.tennis.service;
 
-import com.tennis.dto.PlayerRequestDto;
-import com.tennis.mapper.CreatePlayerMapper;
 import com.tennis.entity.Player;
-import com.tennis.repositories.PlayerDao;
+import com.tennis.repository.PlayerRepository;
 
 public class PlayerService {
 
-    private PlayerDao playerDao;
+    private PlayerRepository playerRepository;
 
-    public PlayerService(PlayerDao playerDao) {
-        this.playerDao = playerDao;
+    public PlayerService(PlayerRepository playerRepository) {
+        this.playerRepository = playerRepository;
     }
 
     public Player getOrCreatePlayer(String playerName) {
-        Player player = playerDao.getPlayerByName(playerName);
-        if (player == null) {
-            PlayerRequestDto playerRequestDto = new PlayerRequestDto(playerName);
-            player = CreatePlayerMapper.INSTANCE.mapFrom(playerRequestDto);
-            playerDao.createPlayer(player);
+        Player foundPlayer = playerRepository.findPlayerByName(playerName);
+        if (foundPlayer != null) {
+            return foundPlayer;
         }
-        return player;
+        Player newPlayer = new Player(playerName);
+        return playerRepository.save(newPlayer);
     }
 }

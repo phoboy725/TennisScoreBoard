@@ -4,8 +4,8 @@ import com.tennis.dto.MatchCurrentState;
 import com.tennis.exception.MatchNotFoundException;
 import com.tennis.entity.Match;
 import com.tennis.entity.Player;
-import com.tennis.repositories.MatchesDao;
-import com.tennis.repositories.PlayerDao;
+import com.tennis.repository.MatchesRepository;
+import com.tennis.repository.PlayerRepository;
 
 import java.util.List;
 import java.util.Map;
@@ -14,17 +14,17 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class MatchService {
 
-    private final MatchesDao matchesDao;
-    private final PlayerDao playerDao;
+    private final MatchesRepository matchesDao;
+    private final PlayerRepository playerDao;
 
     private final Map<UUID, MatchCurrentState> currentMatches = new ConcurrentHashMap<>();
 
-    public MatchService(MatchesDao matchesDao, PlayerDao playerDao) {
+    public MatchService(MatchesRepository matchesDao, PlayerRepository playerDao) {
         this.matchesDao = matchesDao;
         this.playerDao = playerDao;
     }
 
-    public MatchCurrentState getMatch(UUID matchId) {
+    public MatchCurrentState findMatch(UUID matchId) {
         return currentMatches.get(matchId);
     }
 
@@ -62,9 +62,9 @@ public class MatchService {
             return;
         }
 
-        Player playerOne = playerDao.getPlayerById(currentState.getPlayerOneId());
-        Player playerTwo = playerDao.getPlayerById(currentState.getPlayerTwoId());
-        Player winner = playerDao.getPlayerById(currentState.getWinnerId());
+        Player playerOne = playerDao.findPlayerById(currentState.getPlayerOneId());
+        Player playerTwo = playerDao.findPlayerById(currentState.getPlayerTwoId());
+        Player winner = playerDao.findPlayerById(currentState.getWinnerId());
 
         Match match = new Match();
         match.setPlayerOne(playerOne);
@@ -76,14 +76,14 @@ public class MatchService {
 
     public List<Match> getMatches(String filterByPlayerName, int offset) {
         if (filterByPlayerName != null && !filterByPlayerName.trim().isEmpty()) {
-            return matchesDao.findByPlayerName(filterByPlayerName, offset);
+            return matchesDao.findMatchesByPlayerName(filterByPlayerName, offset);
         }
         return matchesDao.readAll(offset);
     }
 
     public int getTotalMatchesCount(String filterByPlayerName) {
         if (filterByPlayerName != null && !filterByPlayerName.trim().isEmpty()) {
-            return matchesDao.countByPlayerName(filterByPlayerName);
+            return matchesDao.countMatchesWithPlayerName(filterByPlayerName);
         }
         return matchesDao.countAll();
     }

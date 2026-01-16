@@ -13,8 +13,8 @@ public class MatchCurrentState {
     private int playerTwoGames = 0;
     private String playerTwoPoints = "0";
     private ArrayList<Integer> playerTwoSetsResult = new ArrayList<>();
-    private boolean isMatchFinished = false;
-    private boolean isTieBreak = false;
+    private boolean matchFinished = false;
+    private boolean tieBreak = false;
     private Long winnerId;
 
     public MatchCurrentState(Long playerOneId, Long playerTwoId) {
@@ -70,11 +70,11 @@ public class MatchCurrentState {
     }
 
     public boolean isMatchFinished() {
-        return isMatchFinished;
+        return matchFinished;
     }
 
     public boolean isTieBreak() {
-        return isTieBreak;
+        return tieBreak;
     }
 
     public Long getWinnerId() {
@@ -97,7 +97,7 @@ public class MatchCurrentState {
         this.playerOnePoints = playerOnePoints;
     }
 
-    public void setPlayerOneSetsResult(int playerOneSetsResult) {
+    public void addPlayerOneSetsResult(int playerOneSetsResult) {
         this.playerOneSetsResult.add(playerOneSetsResult);
     }
 
@@ -117,16 +117,16 @@ public class MatchCurrentState {
         this.playerTwoPoints = playerTwoPoints;
     }
 
-    public void setPlayerTwoSetsResult(int playerTwoSetsResult) {
+    public void addPlayerTwoSetsResult(int playerTwoSetsResult) {
         this.playerTwoSetsResult.add(playerTwoSetsResult);
     }
 
     public void setMatchFinished(boolean isMatchFinished) {
-        this.isMatchFinished = isMatchFinished;
+        this.matchFinished = isMatchFinished;
     }
 
     public void setTieBreak(boolean isTieBreak) {
-        this.isTieBreak = isTieBreak;
+        this.tieBreak = isTieBreak;
     }
 
     public void setWinnerId(Long winnerId) {

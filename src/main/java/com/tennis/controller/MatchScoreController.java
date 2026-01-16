@@ -2,7 +2,7 @@ package com.tennis.controller;
 
 import com.tennis.config.ApplicationContext;
 import com.tennis.dto.MatchCurrentState;
-import com.tennis.repositories.PlayerDao;
+import com.tennis.repository.PlayerRepository;
 import com.tennis.service.MatchService;
 import com.tennis.util.JSPUtil;
 import com.tennis.util.RequestParamUtil;
@@ -19,7 +19,7 @@ import java.util.UUID;
 public class MatchScoreController extends HttpServlet {
 
     private final MatchService matchService = ApplicationContext.matchService();
-    private final PlayerDao playerDao = ApplicationContext.playerDao();
+    private final PlayerRepository playerDao = ApplicationContext.playerDao();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -29,15 +29,15 @@ public class MatchScoreController extends HttpServlet {
             return;
         }
 
-        MatchCurrentState currentMatch = matchService.getMatch(matchId);
+        MatchCurrentState currentMatch = matchService.findMatch(matchId);
 
         if (currentMatch == null) {
             response.sendRedirect(request.getContextPath() + "/matches");
             return;
         }
 
-        String playerOneName = playerDao.getPlayerById(currentMatch.getPlayerOneId()).getName();
-        String playerTwoName = playerDao.getPlayerById(currentMatch.getPlayerTwoId()).getName();
+        String playerOneName = playerDao.findPlayerById(currentMatch.getPlayerOneId()).getName();
+        String playerTwoName = playerDao.findPlayerById(currentMatch.getPlayerTwoId()).getName();
 
         if (!currentMatch.isMatchFinished()) {
             request.setAttribute("matchId", matchId.toString());
@@ -46,7 +46,7 @@ public class MatchScoreController extends HttpServlet {
             request.setAttribute("playerTwoName", playerTwoName);
             request.getRequestDispatcher(JSPUtil.getJspPatch("match-score")).forward(request, response);
         } else {
-            String winnerName = playerDao.getPlayerById(currentMatch.getWinnerId()).getName();
+            String winnerName = playerDao.findPlayerById(currentMatch.getWinnerId()).getName();
             request.setAttribute("matchId", matchId.toString());
             request.setAttribute("currentMatch", currentMatch);
             request.setAttribute("winnerName", winnerName);

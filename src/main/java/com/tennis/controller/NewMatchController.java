@@ -2,7 +2,7 @@ package com.tennis.controller;
 
 import com.tennis.config.ApplicationContext;
 import com.tennis.entity.Player;
-import com.tennis.repositories.PlayerDao;
+import com.tennis.repository.PlayerRepository;
 import com.tennis.service.MatchService;
 import com.tennis.service.PlayerService;
 import com.tennis.util.JSPUtil;
@@ -18,7 +18,7 @@ import java.io.IOException;
 @WebServlet("/new-match")
 public class NewMatchController extends HttpServlet {
 
-    private final PlayerDao playerDao = ApplicationContext.playerDao();
+    private final PlayerRepository playerDao = ApplicationContext.playerDao();
     private final MatchService matchService = ApplicationContext.matchService();
 
     @Override
