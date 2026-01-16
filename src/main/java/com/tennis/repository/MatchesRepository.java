@@ -5,13 +5,13 @@ import com.tennis.entity.Match;
 import java.util.List;
 
 public interface MatchesRepository {
-    List<Match> readAll(int offset);
+    List<Match> findAll(int offset, int limit);
 
-    List<Match> findMatchesByPlayerName(String playerNameFilter, int offset);
+    List<Match> findMatchesByPlayerName(String playerNameFilter, int offset, int limit);
 
-    int countMatchesWithPlayerName(String playerNameFilter);
+    Long countMatchesWithPlayerName(String playerNameFilter);
 
-    int countAll();
+    Long countAll();
 
-    Match saveFinishedMatch(Match match);
+    Match save(Match match);
 }

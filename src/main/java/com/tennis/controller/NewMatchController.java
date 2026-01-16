@@ -18,7 +18,7 @@ import java.io.IOException;
 @WebServlet("/new-match")
 public class NewMatchController extends HttpServlet {
 
-    private final PlayerRepository playerDao = ApplicationContext.playerDao();
+    private final PlayerRepository playerDao = ApplicationContext.playerRepository();
     private final MatchService matchService = ApplicationContext.matchService();
 
     @Override

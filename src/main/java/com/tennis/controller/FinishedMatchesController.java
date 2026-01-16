@@ -20,6 +20,7 @@ public class FinishedMatchesController extends HttpServlet {
     private final MatchService matchService = ApplicationContext.matchService();
     private static final int PAGE_SIZE = 5;
 
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
         String filterByPlayerName = request.getParameter("filter_by_player_name");
@@ -37,9 +38,10 @@ public class FinishedMatchesController extends HttpServlet {
         }
 
         int offset = (currentPage - 1) * PAGE_SIZE;
+        int limit = PAGE_SIZE;
 
-        List<Match> matches = matchService.getMatches(filterByPlayerName, offset);
-        int totalMatches = matchService.getTotalMatchesCount(filterByPlayerName);
+        List<Match> matches = matchService.getMatches(filterByPlayerName, offset, limit);
+        Long totalMatches = matchService.getTotalMatchesCount(filterByPlayerName);
         int noOfPages = (int) Math.ceil((double) totalMatches / PAGE_SIZE);
 
         request.setAttribute("matches", matches);

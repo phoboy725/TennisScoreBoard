@@ -70,18 +70,18 @@ public class MatchService {
         match.setPlayerOne(playerOne);
         match.setPlayerTwo(playerTwo);
         match.setWinner(winner);
-        matchesDao.saveFinishedMatch(match);
+        matchesDao.save(match);
         currentMatches.remove(matchId);
     }
 
-    public List<Match> getMatches(String filterByPlayerName, int offset) {
+    public List<Match> getMatches(String filterByPlayerName, int offset, int limit) {
         if (filterByPlayerName != null && !filterByPlayerName.trim().isEmpty()) {
-            return matchesDao.findMatchesByPlayerName(filterByPlayerName, offset);
+            return matchesDao.findMatchesByPlayerName(filterByPlayerName, offset, limit);
         }
-        return matchesDao.readAll(offset);
+        return matchesDao.findAll(offset, limit);
     }
 
-    public int getTotalMatchesCount(String filterByPlayerName) {
+    public Long getTotalMatchesCount(String filterByPlayerName) {
         if (filterByPlayerName != null && !filterByPlayerName.trim().isEmpty()) {
             return matchesDao.countMatchesWithPlayerName(filterByPlayerName);
         }

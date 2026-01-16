@@ -19,7 +19,7 @@ import java.util.UUID;
 public class MatchScoreController extends HttpServlet {
 
     private final MatchService matchService = ApplicationContext.matchService();
-    private final PlayerRepository playerDao = ApplicationContext.playerDao();
+    private final PlayerRepository playerDao = ApplicationContext.playerRepository();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
