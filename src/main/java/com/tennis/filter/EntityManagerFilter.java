@@ -6,10 +6,10 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
-
 import java.io.IOException;
 
-@WebFilter("/*")
+
+@WebFilter(value = "/*")
 public class EntityManagerFilter implements Filter {
 
     private final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("Tennis");
@@ -20,15 +20,15 @@ public class EntityManagerFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
-        EntityManager entityManager = null;
+        EntityManager em = null;
         try {
-            entityManager = entityManagerFactory.createEntityManager();
-            EntityManagerUtil.bindEntityManager(entityManager);
+            em = entityManagerFactory.createEntityManager();
+            EntityManagerUtil.bindEntityManager(em);
             chain.doFilter(request, response);
         } finally {
             EntityManagerUtil.unbindEntityManager();
-            if (entityManager != null && entityManager.isOpen()) {
-                entityManager.close();
+            if (em != null && em.isOpen()) {
+                em.close();
             }
         }
     }
@@ -40,4 +40,3 @@ public class EntityManagerFilter implements Filter {
         }
     }
 }
-

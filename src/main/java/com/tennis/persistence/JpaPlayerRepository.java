@@ -5,9 +5,9 @@ import com.tennis.exception.DatabaseException;
 import com.tennis.repository.PlayerRepository;
 import com.tennis.util.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.NoResultException;
 
-import java.util.List;
+import java.util.Optional;
 
 public class JpaPlayerRepository implements PlayerRepository {
 
@@ -31,46 +31,26 @@ public class JpaPlayerRepository implements PlayerRepository {
     }
 
     @Override
-    public Player findPlayerByName(String name) {
+    public Optional<Player> findPlayerByName(String name) {
         EntityManager entityManager = EntityManagerUtil.getCurrentEntityManager();
-        EntityTransaction transaction = entityManager.getTransaction();
         try {
-            transaction.begin();
-            List<Player> players = entityManager.createQuery(FIND_BY_NAME_JPQL, Player.class)
+            Player player = entityManager.createQuery(FIND_BY_NAME_JPQL, Player.class)
                     .setParameter("name", name)
-                    .getResultList();
-            transaction.commit();
-            return players.isEmpty() ? null : players.get(0);
-
-        } catch (Exception e) {
-            safeRollback(transaction, e);
-            throw new DatabaseException("Failed to find player", e);
+                    .getSingleResult();
+            return Optional.of(player);
+        } catch (NoResultException e) {
+            return Optional.empty();
         }
     }
 
     @Override
     public Player save(Player player) {
         EntityManager entityManager = EntityManagerUtil.getCurrentEntityManager();
-        EntityTransaction transaction = entityManager.getTransaction();
         try {
-            transaction.begin();
             entityManager.persist(player);
-            transaction.commit();
-
             return player;
         } catch (Exception e) {
-            safeRollback(transaction, e);
             throw new DatabaseException("Failed to save player", e);
-        }
-    }
-
-    private void safeRollback(EntityTransaction transaction, Exception originalException) {
-        if (transaction != null && transaction.isActive()) {
-            try {
-                transaction.rollback();
-            } catch (Exception rollbackException) {
-                originalException.addSuppressed(rollbackException);
-            }
         }
     }
 }

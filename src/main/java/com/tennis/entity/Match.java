@@ -46,18 +46,6 @@ public class Match {
         return winner;
     }
 
-    public void setPlayerOne(Player playerOne) {
-        this.playerOne = playerOne;
-    }
-
-    public void setPlayerTwo(Player playerTwo) {
-        this.playerTwo = playerTwo;
-    }
-
-    public void setWinner(Player winner) {
-        this.winner = winner;
-    }
-
     @Override
     public String toString() {
         return "Match{" +

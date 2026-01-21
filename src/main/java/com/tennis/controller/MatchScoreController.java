@@ -19,7 +19,7 @@ import java.util.UUID;
 public class MatchScoreController extends HttpServlet {
 
     private final MatchService matchService = ApplicationContext.matchService();
-    private final PlayerRepository playerDao = ApplicationContext.playerRepository();
+    private final PlayerRepository playerRepository = ApplicationContext.playerRepository();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -36,8 +36,8 @@ public class MatchScoreController extends HttpServlet {
             return;
         }
 
-        String playerOneName = playerDao.findPlayerById(currentMatch.getPlayerOneId()).getName();
-        String playerTwoName = playerDao.findPlayerById(currentMatch.getPlayerTwoId()).getName();
+        String playerOneName = playerRepository.findPlayerById(currentMatch.getPlayerOneId()).getName();
+        String playerTwoName = playerRepository.findPlayerById(currentMatch.getPlayerTwoId()).getName();
 
         if (!currentMatch.isMatchFinished()) {
             request.setAttribute("matchId", matchId.toString());
@@ -46,7 +46,7 @@ public class MatchScoreController extends HttpServlet {
             request.setAttribute("playerTwoName", playerTwoName);
             request.getRequestDispatcher(JSPUtil.getJspPatch("match-score")).forward(request, response);
         } else {
-            String winnerName = playerDao.findPlayerById(currentMatch.getWinnerId()).getName();
+            String winnerName = playerRepository.findPlayerById(currentMatch.getWinnerId()).getName();
             request.setAttribute("matchId", matchId.toString());
             request.setAttribute("currentMatch", currentMatch);
             request.setAttribute("winnerName", winnerName);

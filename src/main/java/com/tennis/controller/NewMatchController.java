@@ -18,7 +18,7 @@ import java.io.IOException;
 @WebServlet("/new-match")
 public class NewMatchController extends HttpServlet {
 
-    private final PlayerRepository playerDao = ApplicationContext.playerRepository();
+    private final PlayerRepository playerRepository = ApplicationContext.playerRepository();
     private final MatchService matchService = ApplicationContext.matchService();
 
     @Override
@@ -35,9 +35,9 @@ public class NewMatchController extends HttpServlet {
         String checkPlayersNames = PlayerNamesValidation.check(playerOneName, playerTwoName);
 
         if (checkPlayersNames == null) {
-            PlayerService playerService = new PlayerService(playerDao);
-            Player playerOne = playerService.getOrCreatePlayer(playerOneName);
-            Player playerTwo = playerService.getOrCreatePlayer(playerTwoName);
+            PlayerService playerService = new PlayerService(playerRepository);
+            Player playerOne = playerService.createPlayer(playerOneName);
+            Player playerTwo = playerService.createPlayer(playerTwoName);
             String matchId = matchService.createMatch(playerOne.getId(), playerTwo.getId()).toString();
             response.sendRedirect("/match-score?uuid=" + matchId);
         } else {
