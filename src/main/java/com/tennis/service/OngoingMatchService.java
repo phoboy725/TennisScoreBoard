@@ -1,6 +1,7 @@
 package com.tennis.service;
 
-import com.tennis.dto.MatchCurrentState;
+import com.tennis.domain.OngoingMatch;
+import com.tennis.domain.PlayerScored;
 import com.tennis.exception.DatabaseException;
 import com.tennis.exception.MatchNotFinishedException;
 import com.tennis.exception.MatchNotFoundException;
@@ -17,114 +18,88 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class MatchService {
+public class OngoingMatchService {
 
     private final MatchesRepository matchesRepository;
     private final PlayerRepository playerRepository;
     private final MatchScoreService score;
 
-    private final Map<UUID, MatchCurrentState> currentMatches = new ConcurrentHashMap<>();
+    //private final Map<UUID, MatchCurrentState> currentMatches = new ConcurrentHashMap<>();
+    private final Map<UUID, OngoingMatch> matches = new ConcurrentHashMap<>();
 
-    public MatchService(MatchesRepository matchesRepository, PlayerRepository playerRepository, MatchScoreService score) {
+    public OngoingMatchService(MatchesRepository matchesRepository, PlayerRepository playerRepository, MatchScoreService score) {
         this.matchesRepository = matchesRepository;
         this.playerRepository = playerRepository;
         this.score = score;
     }
 
-    public MatchCurrentState findMatch(UUID matchId) {
-        return currentMatches.get(matchId);
+    public OngoingMatch findMatch(UUID matchId) {
+        return matches.get(matchId);
     }
 
     public UUID createMatch(Long playerOneId, Long playerTwoId) {
         UUID matchId = UUID.randomUUID();
-        currentMatches.put(matchId, new MatchCurrentState(playerOneId, playerTwoId));
+        matches.put(matchId, new OngoingMatch(playerOneId, playerTwoId));
         return matchId;
     }
 
-    public void updateScore(UUID matchId, Integer scoreButtonId) {
-        MatchCurrentState match = currentMatches.get(matchId);
+    public void updateScore(UUID matchId, PlayerScored playerScored) {
+        OngoingMatch match = matches.get(matchId);
         if (match == null) {
             throw new MatchNotFoundException("Match not found: " + matchId);
         }
-        if (!match.isMatchFinished()) {
-            if (match.isTieBreak()) {
-                score.countTieBreak(match, scoreButtonId);
-            } else {
-                score.countPoints(match, scoreButtonId);
-            }
-        }
+        match.pointWonBy(playerScored);
     }
-
-//    public void finishMatch(UUID matchId) {
-//
-//        MatchCurrentState currentState = currentMatches.get(matchId);
-//        if (currentState == null) {
-//            return;
-//        }
-//
-//        if (!currentState.isMatchFinished() || currentState.getWinnerId() == null) {
-//            return;
-//        }
-//
-//        Player playerOne = playerRepository.findPlayerById(currentState.getPlayerOneId());
-//        Player playerTwo = playerRepository.findPlayerById(currentState.getPlayerTwoId());
-//        Player winner;
-//
-//        if (currentState.getPlayerOneId().equals(currentState.getWinnerId())) {
-//            winner = playerOne;
-//        } else {
-//            winner = playerTwo;
-//        }
-//
-//        Match match = new Match(playerOne, playerTwo, winner);
-//        matchesRepository.save(match);
-//        currentMatches.remove(matchId);
-//    }
 
     public Match finishMatch(UUID matchId) {
         EntityManager entityManager = EntityManagerUtil.getCurrentEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
-        MatchCurrentState currentState = checkFinishedState(matchId);
+        OngoingMatch ongoingMatch = checkFinishedState(matchId);
         Match match;
         try {
             transaction.begin();
-            Player playerOne = entityManager.getReference(Player.class, currentState.getPlayerOneId());
-            Player playerTwo = entityManager.getReference(Player.class, currentState.getPlayerTwoId());
-            Player winner = entityManager.getReference(Player.class, currentState.getWinnerId());
+            Player playerOne = entityManager.getReference(Player.class, ongoingMatch.getPlayerOneScoreView().getId());
+            Player playerTwo = entityManager.getReference(Player.class, ongoingMatch.getPlayerOneScoreView().getId());
+            Player winner = entityManager.getReference(Player.class, ongoingMatch.getWinnerId());
             match = new Match(playerOne, playerTwo, winner);
             matchesRepository.save(match);
             transaction.commit();
+            matches.remove(matchId);
         } catch (Exception e) {
             safeRollback(transaction, e);
             throw new DatabaseException("Failed to finish match " + matchId, e);
         }
-        currentMatches.remove(matchId);
         return match;
+
     }
 
-    private MatchCurrentState checkFinishedState(UUID matchId) {
-        MatchCurrentState state = currentMatches.get(matchId);
+    private OngoingMatch checkFinishedState(UUID matchId) {
+        OngoingMatch state = matches.get(matchId);
         if (state == null) {
             throw new MatchNotFoundException("No match with this ID");
         }
-        if (!state.isMatchFinished() || state.getWinnerId() == null) {
+        if (!state.isFinished() || state.getWinnerId() == null) {
             throw new MatchNotFinishedException("Match is not finished");
         }
         return state;
     }
 
     public List<Match> getMatches(String filterByPlayerName, int offset, int limit) {
-        if (filterByPlayerName != null && !filterByPlayerName.trim().isEmpty()) {
+        if (isPlayerFilterApplied(filterByPlayerName)) {
             return matchesRepository.findMatchesByPlayerName(filterByPlayerName, offset, limit);
         }
         return matchesRepository.findAll(offset, limit);
     }
 
     public Long getTotalMatchesCount(String filterByPlayerName) {
-        if (filterByPlayerName != null && !filterByPlayerName.trim().isEmpty()) {
+        if (isPlayerFilterApplied(filterByPlayerName)) {
             return matchesRepository.countMatchesWithPlayerName(filterByPlayerName);
         }
         return matchesRepository.countAll();
+    }
+
+    private boolean isPlayerFilterApplied(String filterByPlayerName) {
+        return filterByPlayerName != null && !filterByPlayerName.isBlank();
     }
 
     private void safeRollback(EntityTransaction transaction, Exception originalException) {

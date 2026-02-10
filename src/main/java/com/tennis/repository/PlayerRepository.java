@@ -5,7 +5,7 @@ import com.tennis.entity.Player;
 import java.util.Optional;
 
 public interface PlayerRepository {
-    Player findPlayerById(Long id);
+    Player findById(Long id);
 
     Optional<Player> findPlayerByName(String name);
 

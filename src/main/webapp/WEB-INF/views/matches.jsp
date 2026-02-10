@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <html>
 <head>
@@ -25,8 +26,8 @@
         </div>
         <div>
             <nav class="nav-links">
-                <a class="nav-link" href="/index.html">Home</a>
-                <a class="nav-link" href="/matches">Matches</a>
+                <a class="nav-link" href="${pageContext.request.contextPath}/index.html">Home</a>
+                <a class="nav-link" href="${pageContext.request.contextPath}/matches">Matches</a>
             </nav>
         </div>
     </section>
@@ -34,18 +35,10 @@
 <main>
     <div class="container">
         <h1>Matches</h1>
-        <%--        <div class="input-container">--%>
-        <%--            <input class="input-filter" placeholder="Filter by name" type="text" />--%>
-        <%--            <div>--%>
-        <%--                <a href="/matches">--%>
-        <%--                    <button class="btn-filter">Reset Filter</button>--%>
-        <%--                </a>--%>
-        <%--            </div>--%>
-        <%--        </div>--%>
-            <form action="/matches" method="get" class="input-container">
-                <input class="input-filter" placeholder="Filter by name" type="text" name="filter_by_player_name" value>
+            <form action="${pageContext.request.contextPath}/matches" method="get" class="input-container">
+                <input class="input-filter" placeholder="Filter by name" type="text" name="filter_by_player_name" value="${fn:escapeXml(filter_by_player_name)}">
                 <button type="submit" class="btn-filter">Apply</button>
-                <a href="/matches">
+                <a href="${pageContext.request.contextPath}/matches">
                     <button type="button" class="btn-filter">Reset Filter</button>
                 </a>
             </form>
@@ -72,23 +65,15 @@
                 </tr>
             </c:if>
         </table>
-
-        <%--        <div class="pagination">--%>
-        <%--            <a class="prev" href="#"> < </a>--%>
-        <%--            <a class="num-page current" href="#">1</a>--%>
-        <%--            <a class="num-page" href="#">2</a>--%>
-        <%--            <a class="num-page" href="#">3</a>--%>
-        <%--            <a class="next" href="#"> > </a>--%>
-        <%--        </div>--%>
         <div class="pagination">
             <c:if test="${currentPage > 1}">
                 <a class="prev"
-                   href="matches?filter_by_player_name=${filter_by_player_name}&page=${currentPage - 1}">
+                   href="${pageContext.request.contextPath}/matches?filter_by_player_name=${filterByPlayerName}&page=${currentPage - 1}">
                     &lt;
                 </a>
             </c:if>
 
-            <c:forEach var="i" begin="1" end="${noOfPages}">
+            <c:forEach var="i" begin="1" end="${totalPages}">
                 <c:choose>
                     <c:when test="${i == currentPage}">
                         <a class="num-page current" href="#">
@@ -97,16 +82,16 @@
                     </c:when>
                     <c:otherwise>
                         <a class="num-page"
-                           href="matches?filter_by_player_name=${filter_by_player_name}&page=${i}">
+                           href="${pageContext.request.contextPath}/matches?filter_by_player_name=${filterByPlayerName}&page=${i}">
                                 ${i}
                         </a>
                     </c:otherwise>
                 </c:choose>
             </c:forEach>
 
-            <c:if test="${currentPage < noOfPages}">
+            <c:if test="${currentPage < totalPages}">
                 <a class="next"
-                   href="matches?filter_by_player_name=${filter_by_player_name}&page=${currentPage + 1}">
+                   href="${pageContext.request.contextPath}/matches?filter_by_player_name=${filterByPlayerName}&page=${currentPage + 1}">
                     &gt;
                 </a>
             </c:if>

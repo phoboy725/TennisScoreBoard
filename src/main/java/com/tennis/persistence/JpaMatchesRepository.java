@@ -1,5 +1,6 @@
 package com.tennis.persistence;
 
+import com.tennis.entity.Player;
 import com.tennis.exception.DatabaseException;
 import com.tennis.entity.Match;
 import com.tennis.repository.MatchesRepository;
@@ -37,6 +38,11 @@ public class JpaMatchesRepository implements MatchesRepository {
 
     private static final String COUNT_WITH_NAME_JPQL =
             COUNT_ALL_JPQL + FILTER_BY_NAME_JPQL;
+
+    public Match findById(Long id) {
+        EntityManager entityManager = EntityManagerUtil.getCurrentEntityManager();
+        return entityManager.find(Match.class, id);
+    }
 
     @Override
     public List<Match> findAll(int offset, int limit) {

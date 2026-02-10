@@ -121,8 +121,8 @@ public class MatchCurrentState {
         this.playerTwoSetsResult.add(playerTwoSetsResult);
     }
 
-    public void setMatchFinished(boolean isMatchFinished) {
-        this.matchFinished = isMatchFinished;
+    public void setMatchFinished(boolean matchFinished) {
+        this.matchFinished = matchFinished;
     }
 
     public void setTieBreak(boolean isTieBreak) {

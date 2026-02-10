@@ -25,8 +25,8 @@
         </div>
         <div>
             <nav class="nav-links">
-                <a class="nav-link" href="/index.html">Home</a>
-                <a class="nav-link" href="/matches">Matches</a>
+                <a class="nav-link" href="${pageContext.request.contextPath}/index.html">Home</a>
+                <a class="nav-link" href="${pageContext.request.contextPath}/matches">Matches</a>
             </nav>
         </div>
     </section>
@@ -48,24 +48,24 @@
                 <tbody>
                 <tr class="player1">
                     <td class="table-text">${playerOneName}</td>
-                    <td class="table-text">${currentMatch.playerOneSets}</td>
-                    <td class="table-text">${currentMatch.playerOneGames}</td>
-                    <td class="table-text">${currentMatch.playerOnePoints}</td>
+                    <td class="table-text">${ongoingMatch.playerOneSets}</td>
+                    <td class="table-text">${ongoingMatch.playerOneGames}</td>
+                    <td class="table-text">${ongoingMatch.playerOnePoints}</td>
                     <td class="table-text">
-                        <form method="post" action="/match-score?uuid=${matchId}">
-                            <input type="hidden" name="scoreButtonId" value="1" />
+                        <form method="post" action="${pageContext.request.contextPath}/match-score?uuid=${uuid}">
+                            <input type="hidden" name="scoreButtonId" value="ONE" />
                             <button type="submit" class="score-btn">Score</button>
                         </form>
                     </td>
                 </tr>
                 <tr class="player2">
                     <td class="table-text">${playerTwoName}</td>
-                    <td class="table-text">${currentMatch.playerTwoSets}</td>
-                    <td class="table-text">${currentMatch.playerTwoGames}</td>
-                    <td class="table-text">${currentMatch.playerTwoPoints}</td>
+                    <td class="table-text">${ongoingMatch.playerTwoSets}</td>
+                    <td class="table-text">${ongoingMatch.playerTwoGames}</td>
+                    <td class="table-text">${ongoingMatch.playerTwoPoints}</td>
                     <td class="table-text">
-                        <form method="post" action="/match-score?uuid=${matchId}">
-                            <input type="hidden" name="scoreButtonId" value="2" />
+                        <form method="post" action="${pageContext.request.contextPath}/match-score?uuid=${uuid}">
+                            <input type="hidden" name="scoreButtonId" value="TWO" />
                             <button type="submit" class="score-btn">Score</button>
                         </form>
                     </td>

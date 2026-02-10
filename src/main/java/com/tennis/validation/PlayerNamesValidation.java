@@ -1,25 +1,51 @@
 package com.tennis.validation;
 
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
 
 public class PlayerNamesValidation {
 
     private static final Pattern NAME_PATTERN = Pattern.compile("^[а-яА-яa-zA-Z'\\-\\s]{2,30}$");
+    private static final String EMPTY_NAME = "Names can not be empty";
+    private static final String NOT_UNIQUE_NAME = "Names must be unique";
+    private static final String WRONG_CHARS_NAME  = "Names must be 2 to 30 characters long, using only letters, \" ' \", \" - \" and space";
 
-    public static String check(String playerOneName, String playerTwoName) {
+//    public static String check(String playerOneName, String playerTwoName) {
+//        if (playerOneName == null || playerTwoName == null) {
+//            return "Names must be 2 to 30 characters long, using only letters, \" ' \", \" - \" and space";
+//        }
+//        if (playerOneName.trim().isEmpty() || playerTwoName.trim().isEmpty()) {
+//            return "Names must be 2 to 30 characters long, using only letters, \" ' \", \" - \" and space";
+//        }
+//        if (playerOneName.equalsIgnoreCase(playerTwoName)) {
+//            return "Names must be unique";
+//        }
+//        if (!NAME_PATTERN.matcher(playerOneName).matches() || !NAME_PATTERN.matcher(playerTwoName).matches()) {
+//            return "Names must be 2 to 30 characters long, using only letters, \" ' \", \" - \" and space";
+//        }
+//        return null;
+//    }
+
+    public static List<String> check(String playerOneName, String playerTwoName) {
+        List<String> errors = new ArrayList<>();
+
         if (playerOneName == null || playerTwoName == null) {
-            return "Names must be 2 to 30 characters long, using only letters, \" ' \", \" - \" and space";
+            errors.add(EMPTY_NAME);
         }
-        if (playerOneName.trim().isEmpty() || playerTwoName.trim().isEmpty()) {
-            return "Names must be 2 to 30 characters long, using only letters, \" ' \", \" - \" and space";
+
+        String playerOneNameStripped = playerOneName.strip();
+        String playerTwoNameStripped = playerTwoName.strip();
+
+        if (playerOneNameStripped.isEmpty() || playerTwoNameStripped.isEmpty()) {
+            errors.add(EMPTY_NAME);
         }
-        if (playerOneName.equalsIgnoreCase(playerTwoName)) {
-            return "Names must be unique";
+        if (playerOneNameStripped.equalsIgnoreCase(playerTwoNameStripped)) {
+            errors.add(NOT_UNIQUE_NAME);
         }
-        if (!NAME_PATTERN.matcher(playerOneName).matches() || !NAME_PATTERN.matcher(playerTwoName).matches()) {
-            return "Names must be 2 to 30 characters long, using only letters, \" ' \", \" - \" and space";
+        if (!NAME_PATTERN.matcher(playerOneNameStripped).matches() || !NAME_PATTERN.matcher(playerTwoNameStripped).matches()) {
+            errors.add(WRONG_CHARS_NAME);
         }
-        return null;
+        return errors;
     }
 }

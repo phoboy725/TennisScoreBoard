@@ -1,16 +1,11 @@
 package com.tennis.service;
 
-import com.tennis.dto.PlayerRequestDto;
 import com.tennis.entity.Player;
 import com.tennis.exception.DatabaseException;
-import com.tennis.mapper.CreatePlayerMapper;
 import com.tennis.repository.PlayerRepository;
 import com.tennis.util.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
-import org.hibernate.exception.ConstraintViolationException;
-
-import java.util.Optional;
 
 public class PlayerService {
 
@@ -33,6 +28,12 @@ public class PlayerService {
             safeRollback(transaction, e);
             throw new DatabaseException("Failed to create player " + playerName, e);
         }
+    }
+
+    public Player findPlayerById(Long id) {
+        EntityManager entityManager = EntityManagerUtil.getCurrentEntityManager();
+        Player player = entityManager.find(Player.class, id);
+        return player;
     }
 
     private void safeRollback(EntityTransaction transaction, Exception originalException) {

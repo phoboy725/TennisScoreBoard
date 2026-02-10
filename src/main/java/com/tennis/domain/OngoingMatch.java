@@ -1,0 +1,67 @@
+
+package com.tennis.domain;
+
+import com.tennis.dto.MatchStateDto;
+import com.tennis.dto.PlayerScoreDto;
+
+import java.util.Objects;
+
+public final class OngoingMatch {
+
+    private final PlayerScore playerOneScore;
+    private final PlayerScore playerTwoScore;
+
+    private MatchState state;
+    private Long winnerId;
+
+    public OngoingMatch(Long playerOneId, Long playerTwoId) {
+        this.playerOneScore = new PlayerScore(playerOneId);
+        this.playerTwoScore = new PlayerScore(playerTwoId);
+        this.state = new RegularState();
+    }
+
+    public void pointWonBy(PlayerScored playerScored) {
+        Objects.requireNonNull(playerScored, "playerScored");
+        state.addPoint(this, playerScored);
+    }
+
+    // ===== package-private helpers for states =====
+
+    PlayerScore winnerOfPoint(PlayerScored who) {
+        return who == PlayerScored.ONE ? playerOneScore : playerTwoScore;
+    }
+
+    PlayerScore loserOfPoint(PlayerScored who) {
+        return who == PlayerScored.ONE ? playerTwoScore : playerOneScore;
+    }
+
+    PlayerScore p1() { return playerOneScore; }
+    PlayerScore p2() { return playerTwoScore; }
+
+    void setState(MatchState newState) {
+        this.state = Objects.requireNonNull(newState, "newState");
+    }
+
+    void finishWithWinner(PlayerScore winner) {
+        this.winnerId = winner.getId();
+        this.state = new FinishedState();
+    }
+
+    public boolean isFinished() {
+        return winnerId != null;
+    }
+
+    public Long getWinnerId() {
+        return winnerId;
+    }
+
+    // (опционально) для UI
+    public boolean isTieBreak() {
+        return state instanceof TieBreakState;
+    }
+
+    public PlayerScore getPlayerOneScoreView() { return playerOneScore; }
+    public PlayerScore getPlayerTwoScoreView() { return playerTwoScore; }
+
+
+}

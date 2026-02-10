@@ -7,5 +7,6 @@ public record PlayerScoreDto(
         int sets,
         int games,
         String points,
+        int tieBreakPoints,
         List<Integer> setsResult
 ) { }

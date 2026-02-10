@@ -2,28 +2,33 @@ package com.tennis.controller;
 
 import com.tennis.config.ApplicationContext;
 import com.tennis.entity.Player;
-import com.tennis.repository.PlayerRepository;
-import com.tennis.service.MatchService;
+import com.tennis.service.OngoingMatchService;
 import com.tennis.service.PlayerService;
-import com.tennis.util.JSPUtil;
 import com.tennis.validation.PlayerNamesValidation;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 @WebServlet("/new-match")
-public class NewMatchController extends HttpServlet {
+public class NewMatchController extends BaseController {
 
-    private final PlayerRepository playerRepository = ApplicationContext.playerRepository();
-    private final MatchService matchService = ApplicationContext.matchService();
+    private PlayerService playerService;
+    private OngoingMatchService ongoingMatchService;
+
+    @Override
+    public void init() {
+        this.playerService = ApplicationContext.playerService();
+        this.ongoingMatchService = ApplicationContext.ongoingMatchService();
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher(JSPUtil.getJspPatch("new-match")).forward(request, response);
+        forwardTo(ViewsPath.NEW_MATCH.jsp(), request, response);
     }
 
     @Override
@@ -32,17 +37,19 @@ public class NewMatchController extends HttpServlet {
         String playerOneName = request.getParameter("playerOne");
         String playerTwoName = request.getParameter("playerTwo");
 
-        String checkPlayersNames = PlayerNamesValidation.check(playerOneName, playerTwoName);
+        List<String> checkPlayersNames = PlayerNamesValidation.check(playerOneName, playerTwoName);
 
-        if (checkPlayersNames == null) {
-            PlayerService playerService = new PlayerService(playerRepository);
+        if (checkPlayersNames.isEmpty()) {
             Player playerOne = playerService.createPlayer(playerOneName);
             Player playerTwo = playerService.createPlayer(playerTwoName);
-            String matchId = matchService.createMatch(playerOne.getId(), playerTwo.getId()).toString();
-            response.sendRedirect("/match-score?uuid=" + matchId);
+            String uuid = ongoingMatchService.createMatch(playerOne.getId(), playerTwo.getId()).toString();
+            redirectTo(ViewsPath.MATCH_SCORE.jsp(), Map.of("uuid", uuid), request, response);
         } else {
-            request.setAttribute("errorMessage", checkPlayersNames);
-            request.getRequestDispatcher(JSPUtil.getJspPatch("new-match")).forward(request, response);
+            request.setAttribute("playerOne", playerOneName);
+            request.setAttribute("playerTwo", playerTwoName);
+            request.setAttribute("errors", checkPlayersNames);
+            forwardTo(ViewsPath.NEW_MATCH.jsp(), request, response);
+
         }
     }
 }

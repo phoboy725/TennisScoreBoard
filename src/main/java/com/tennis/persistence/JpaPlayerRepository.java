@@ -25,7 +25,7 @@ public class JpaPlayerRepository implements PlayerRepository {
             SELECT_ALL_JPQL + FILTER_BY_NAME_JPQL;
 
     @Override
-    public Player findPlayerById(Long id) {
+    public Player findById(Long id) {
         EntityManager entityManager = EntityManagerUtil.getCurrentEntityManager();
         return entityManager.find(Player.class, id);
     }

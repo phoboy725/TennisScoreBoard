@@ -5,6 +5,8 @@ import com.tennis.entity.Match;
 import java.util.List;
 
 public interface MatchesRepository {
+    Match findById(Long Id);
+
     List<Match> findAll(int offset, int limit);
 
     List<Match> findMatchesByPlayerName(String playerNameFilter, int offset, int limit);
