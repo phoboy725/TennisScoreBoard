@@ -1,9 +1,6 @@
 
 package com.tennis.domain;
 
-import com.tennis.dto.MatchStateDto;
-import com.tennis.dto.PlayerScoreDto;
-
 import java.util.Objects;
 
 public final class OngoingMatch {
@@ -60,8 +57,9 @@ public final class OngoingMatch {
         return state instanceof TieBreakState;
     }
 
-    public PlayerScore getPlayerOneScoreView() { return playerOneScore; }
-    public PlayerScore getPlayerTwoScoreView() { return playerTwoScore; }
+    public PlayerScore getPlayerOneScore() { return playerOneScore; }
+    public PlayerScore getPlayerTwoScore() { return playerTwoScore; }
 
 
+    public MatchState getState() { return this.state;}
 }

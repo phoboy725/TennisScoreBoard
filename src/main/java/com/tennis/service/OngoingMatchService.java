@@ -32,7 +32,7 @@ public class OngoingMatchService {
         this.playerRepository = playerRepository;
         this.score = score;
     }
-
+// !!! сделать Optional
     public OngoingMatch findMatch(UUID matchId) {
         return matches.get(matchId);
     }
@@ -58,8 +58,8 @@ public class OngoingMatchService {
         Match match;
         try {
             transaction.begin();
-            Player playerOne = entityManager.getReference(Player.class, ongoingMatch.getPlayerOneScoreView().getId());
-            Player playerTwo = entityManager.getReference(Player.class, ongoingMatch.getPlayerOneScoreView().getId());
+            Player playerOne = entityManager.getReference(Player.class, ongoingMatch.getPlayerOneScore().getId());
+            Player playerTwo = entityManager.getReference(Player.class, ongoingMatch.getPlayerOneScore().getId());
             Player winner = entityManager.getReference(Player.class, ongoingMatch.getWinnerId());
             match = new Match(playerOne, playerTwo, winner);
             matchesRepository.save(match);

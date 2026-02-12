@@ -11,7 +11,6 @@ public final class PlayerScore {
     private int games = 0;
     private int sets = 0;
     private int tieBreakPoints = 0;
-
     private final List<Integer> setsResult = new ArrayList<>();
 
     public PlayerScore(Long playerId) {
@@ -45,11 +44,6 @@ public final class PlayerScore {
     // чтобы JSP мог читать, но не менять список
     public List<Integer> getSetsResult() {
         return Collections.unmodifiableList(setsResult);
-    }
-
-    public String getSetsResultSafe(int index) {
-        if (index < 0 || index >= setsResult.size()) return "-";
-        return String.valueOf(setsResult.get(index));
     }
 
     public boolean hasAdvantage() {

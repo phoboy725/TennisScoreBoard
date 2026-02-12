@@ -7,9 +7,9 @@ final class TieBreakState implements MatchState {
     private static final int VICTORY_MATCH_SETS = 2;
 
     @Override
-    public void addPoint(OngoingMatch match, PlayerScored playerScored) {
-        PlayerScore winner = match.winnerOfPoint(playerScored);
-        PlayerScore loser  = match.loserOfPoint(playerScored);
+    public void addPoint(OngoingMatch ongoingMatch, PlayerScored playerScored) {
+        PlayerScore winner = ongoingMatch.winnerOfPoint(playerScored);
+        PlayerScore loser  = ongoingMatch.loserOfPoint(playerScored);
 
         winner.incrementTieBreakPoints();
 
@@ -35,11 +35,11 @@ final class TieBreakState implements MatchState {
             loser.resetPoints();
 
             if (winner.getSets() >= VICTORY_MATCH_SETS) {
-                match.finishWithWinner(winner);
+                ongoingMatch.finishWithWinner(winner);
                 return;
             }
 
-            match.setState(new RegularState());
+            ongoingMatch.setState(new RegularState());
         }
     }
 }

@@ -47,16 +47,16 @@
                 </thead>
                 <tbody>
                 <tr class="player1">
-                    <td class="table-text">${playerOneName}</td>
-                    <td class="table-text">${currentMatch.getPlayerOneSetsResultSafe(0)}</td>
-                    <td class="table-text">${currentMatch.getPlayerOneSetsResultSafe(1)}</td>
-                    <td class="table-text">${currentMatch.getPlayerOneSetsResultSafe(2)}</td>
+                    <td class="table-text">${ongoingMatch.playerOne.name}</td>
+                    <td class="table-text">${ongoingMatch.PlayerOneScore.getSetScore(0)}</td>
+                    <td class="table-text">${ongoingMatch.PlayerOneScore.getSetScore(1)}</td>
+                    <td class="table-text">${ongoingMatch.PlayerOneScore.getSetScore(2)}</td>
                 </tr>
                 <tr class="player2">
-                    <td class="table-text">${playerTwoName}</td>
-                    <td class="table-text">${currentMatch.getPlayerTwoSetsResultSafe(0)}</td>
-                    <td class="table-text">${currentMatch.getPlayerTwoSetsResultSafe(1)}</td>
-                    <td class="table-text">${currentMatch.getPlayerTwoSetsResultSafe(2)}</td>
+                    <td class="table-text">${ongoingMatch.playerTwo.name}</td>
+                    <td class="table-text">${ongoingMatch.PlayerTwoScore.getSetScore(0)}</td>
+                    <td class="table-text">${ongoingMatch.PlayerTwoScore.getSetScore(1)}</td>
+                    <td class="table-text">${ongoingMatch.PlayerTwoScore.getSetScore(3)}</td>
                 </tr>
                 </tbody>
             </table>

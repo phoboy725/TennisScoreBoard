@@ -2,6 +2,8 @@ package com.tennis.controller;
 
 
 import com.tennis.config.ApplicationContext;
+import com.tennis.dto.FinishedMatchDto;
+import com.tennis.dto.MatchDtoFactory;
 import com.tennis.entity.Match;
 import com.tennis.service.FinishedMatchService;
 import jakarta.servlet.ServletException;
@@ -18,6 +20,7 @@ import java.util.List;
 public class FinishedMatchesController extends HttpServlet {
 
     private static final int PAGE_SIZE = 5;
+    private final String MATCHES = "matches";
     private FinishedMatchService finishedMatchService;
 
 
@@ -35,14 +38,15 @@ public class FinishedMatchesController extends HttpServlet {
         int limit = PAGE_SIZE;
 
         List<Match> matches = finishedMatchService.getMatches(filterByPlayerName, offset, limit);
+        List<FinishedMatchDto> matchesDto = matches.stream().map(MatchDtoFactory::from).toList();
         Long totalMatches = finishedMatchService.getTotalMatchesCount(filterByPlayerName);
         int totalPages = (int) Math.ceil((double) totalMatches / PAGE_SIZE);
 
-        request.setAttribute("matches", matches);
+        request.setAttribute(MATCHES, matchesDto);
         request.setAttribute("currentPage", currentPage);
         request.setAttribute("totalPages", totalPages);
         request.setAttribute("filterByPlayerName", filterByPlayerName != null ? filterByPlayerName : "");
-        request.setAttribute("size", matches.size());
+        request.setAttribute("size", matchesDto.size());
         request.getRequestDispatcher("/WEB-INF/views/matches.jsp").forward(request, response);
     }
 

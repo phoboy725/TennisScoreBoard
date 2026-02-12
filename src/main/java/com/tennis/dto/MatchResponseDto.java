@@ -6,9 +6,11 @@ import java.util.UUID;
 
 public record MatchResponseDto(
         UUID uuid,
-        PlayerScoreDto playerOne,
-        PlayerScoreDto playerTwo,
+        PlayerInfoDto playerOne,
+        PlayerInfoDto playerTwo,
+        PlayerScoreDto playerOneScore,
+        PlayerScoreDto playerTwoScore,
         MatchState matchState,
-        Long winnerId
+        PlayerInfoDto winner
 ) {
 }

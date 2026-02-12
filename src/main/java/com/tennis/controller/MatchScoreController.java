@@ -3,20 +3,15 @@ package com.tennis.controller;
 import com.tennis.config.ApplicationContext;
 import com.tennis.domain.OngoingMatch;
 import com.tennis.domain.PlayerScored;
-import com.tennis.dto.MatchCurrentState;
-import com.tennis.dto.MatchDto;
-import com.tennis.dto.MatchScorePageDto;
-import com.tennis.dto.MatchStateDto;
+import com.tennis.dto.MatchDtoFactory;
+import com.tennis.dto.MatchResponseDto;
 import com.tennis.exception.MatchNotFoundException;
 import com.tennis.exception.MissingParameterException;
-import com.tennis.mapper.MatchScorePageMapper;
-import com.tennis.mapper.MatchStateMapper;
 import com.tennis.service.OngoingMatchService;
 import com.tennis.service.PlayerService;
 import com.tennis.util.JSPUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -29,12 +24,14 @@ public class MatchScoreController extends BaseController {
 
     private PlayerService playerService;
     private OngoingMatchService ongoingMatchService;
-    private final String MATCH = "match";
+    private MatchDtoFactory matchDtoFactory;
+    private final String MATCH = "ongoingMatch";
 
     @Override
     public void init() {
         this.playerService = ApplicationContext.playerService();
         this.ongoingMatchService = ApplicationContext.ongoingMatchService();
+        this.matchDtoFactory = new MatchDtoFactory();
     }
 
     private static String getRequiredParameter(HttpServletRequest request, String paramName) {
@@ -57,17 +54,9 @@ public class MatchScoreController extends BaseController {
             return;
         }
 
-        String playerOneName = playerService.findPlayerById(ongoingMatch.getPlayerOneScoreView().getId()).getName();
-        String playerTwoName = playerService.findPlayerById(ongoingMatch.getPlayerTwoScoreView().getId()).getName();
+        MatchResponseDto matchResponseDto = matchDtoFactory.fromMatch(uuid);
 
-        MatchScorePageDto page = MatchScorePageMapper.toPageDto(
-                uuid.toString(),
-                playerOneName,
-                playerTwoName,
-                ongoingMatch
-        );
-
-        request.setAttribute(MATCH, page);
+        request.setAttribute(MATCH, matchResponseDto);
         forwardTo(ViewsPath.MATCH_SCORE.jsp(), request, response);
     }
 
@@ -76,30 +65,37 @@ public class MatchScoreController extends BaseController {
         UUID uuid = UUID.fromString(getRequiredParameter(request, "uuid"));
         PlayerScored scoreButtonId = PlayerScored.from(getRequiredParameter(request, "scoreButtonId"));
         OngoingMatch ongoingMatch = ongoingMatchService.findMatch(uuid);
-        String playerOneName = playerService.findPlayerById(ongoingMatch.getPlayerOneScoreView().getId()).getName();
-        String playerTwoName = playerService.findPlayerById(ongoingMatch.getPlayerTwoScoreView().getId()).getName();
+        String playerOneName = playerService.findPlayerById(ongoingMatch.getPlayerOneScore().getId()).getName();
+        String playerTwoName = playerService.findPlayerById(ongoingMatch.getPlayerTwoScore().getId()).getName();
 
         try {
             ongoingMatchService.updateScore(uuid, scoreButtonId);
-            OngoingMatch match = ongoingMatchService.findMatch(uuid);
 
-            if (match == null) {
+            if (ongoingMatch == null) {
                 redirectTo(ViewsPath.MATCHES.jsp(), Map.of(), request, response);
                 return;
             }
 
-            if (match.isFinished()) {
+            if (ongoingMatch.isFinished()) {
+
+                MatchResponseDto matchResponseDto = matchDtoFactory.fromMatch(uuid);
+                request.setAttribute(MATCH, matchResponseDto);
+
                 ongoingMatchService.finishMatch(uuid);
-                String winnerName = playerService.findPlayerById(match.getWinnerId()).getName();
-                request.setAttribute("matchId", uuid.toString());
-                request.setAttribute("currentMatch", match);
-                request.setAttribute("winnerName", winnerName);
-                request.setAttribute("playerOneName", playerOneName);
-                request.setAttribute("playerTwoName", playerTwoName);
-                request.getRequestDispatcher(JSPUtil.getJspPath("match-winner")).forward(request, response);
+//                String winnerName = playerService.findPlayerById(ongoingMatch.getWinnerId()).getName();
+//                request.setAttribute("matchId", uuid.toString());
+//                request.setAttribute("currentMatch", ongoingMatch);
+//                request.setAttribute("winnerName", winnerName);
+//                request.setAttribute("playerOneName", playerOneName);
+//                request.setAttribute("playerTwoName", playerTwoName);
+//                request.getRequestDispatcher(JSPUtil.getJspPath("match-winner")).forward(request, response);
                 forwardTo(ViewsPath.MATCH_WINNER.jsp(), request, response);
                 return;
             }
+
+            MatchResponseDto matchResponseDto = matchDtoFactory.fromMatch(uuid);
+
+            request.setAttribute(MATCH, matchResponseDto);
 
             response.sendRedirect(request.getContextPath() + "/match-score?uuid=" + uuid);
 

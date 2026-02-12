@@ -47,10 +47,10 @@
                 </thead>
                 <tbody>
                 <tr class="player1">
-                    <td class="table-text">${playerOneName}</td>
-                    <td class="table-text">${ongoingMatch.playerOneSets}</td>
-                    <td class="table-text">${ongoingMatch.playerOneGames}</td>
-                    <td class="table-text">${ongoingMatch.playerOnePoints}</td>
+                    <td class="table-text">${ongoingMatch.playerOne.name}</td>
+                    <td class="table-text">${ongoingMatch.playerOneScore.sets}</td>
+                    <td class="table-text">${ongoingMatch.playerOneScore.games}</td>
+                    <td class="table-text">${ongoingMatch.playerOneScore.points}</td>
                     <td class="table-text">
                         <form method="post" action="${pageContext.request.contextPath}/match-score?uuid=${uuid}">
                             <input type="hidden" name="scoreButtonId" value="ONE" />
@@ -59,10 +59,10 @@
                     </td>
                 </tr>
                 <tr class="player2">
-                    <td class="table-text">${playerTwoName}</td>
-                    <td class="table-text">${ongoingMatch.playerTwoSets}</td>
-                    <td class="table-text">${ongoingMatch.playerTwoGames}</td>
-                    <td class="table-text">${ongoingMatch.playerTwoPoints}</td>
+                    <td class="table-text">${ongoingMatch.playerTwo.name}</td>
+                    <td class="table-text">${ongoingMatch.playerTwoScore.sets}</td>
+                    <td class="table-text">${ongoingMatch.playerTwoScore.games}</td>
+                    <td class="table-text">${ongoingMatch.playerTwoScore.points}</td>
                     <td class="table-text">
                         <form method="post" action="${pageContext.request.contextPath}/match-score?uuid=${uuid}">
                             <input type="hidden" name="scoreButtonId" value="TWO" />
