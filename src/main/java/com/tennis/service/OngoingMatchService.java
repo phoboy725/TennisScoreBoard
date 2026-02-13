@@ -24,7 +24,6 @@ public class OngoingMatchService {
     private final PlayerRepository playerRepository;
     private final MatchScoreService score;
 
-    //private final Map<UUID, MatchCurrentState> currentMatches = new ConcurrentHashMap<>();
     private final Map<UUID, OngoingMatch> matches = new ConcurrentHashMap<>();
 
     public OngoingMatchService(MatchesRepository matchesRepository, PlayerRepository playerRepository, MatchScoreService score) {
@@ -38,9 +37,9 @@ public class OngoingMatchService {
     }
 
     public UUID createMatch(Long playerOneId, Long playerTwoId) {
-        UUID matchId = UUID.randomUUID();
-        matches.put(matchId, new OngoingMatch(playerOneId, playerTwoId));
-        return matchId;
+        UUID uuid = UUID.randomUUID();
+        matches.put(uuid, new OngoingMatch(playerOneId, playerTwoId));
+        return uuid;
     }
 
     public void updateScore(UUID matchId, PlayerScored playerScored) {
@@ -59,7 +58,7 @@ public class OngoingMatchService {
         try {
             transaction.begin();
             Player playerOne = entityManager.getReference(Player.class, ongoingMatch.getPlayerOneScore().getId());
-            Player playerTwo = entityManager.getReference(Player.class, ongoingMatch.getPlayerOneScore().getId());
+            Player playerTwo = entityManager.getReference(Player.class, ongoingMatch.getPlayerTwoScore().getId());
             Player winner = entityManager.getReference(Player.class, ongoingMatch.getWinnerId());
             match = new Match(playerOne, playerTwo, winner);
             matchesRepository.save(match);

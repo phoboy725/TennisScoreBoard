@@ -11,11 +11,11 @@ public class Match {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "player_one_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "player_one_id", referencedColumnName = "id", nullable = false, unique = true)
     private Player playerOne;
 
     @ManyToOne
-    @JoinColumn(name = "player_two_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "player_two_id", referencedColumnName = "id", nullable = false, unique = true)
     private Player playerTwo;
 
     @ManyToOne

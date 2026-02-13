@@ -68,7 +68,7 @@
         <div class="pagination">
             <c:if test="${currentPage > 1}">
                 <a class="prev"
-                   href="${pageContext.request.contextPath}/matches?filter_by_player_name=${filterByPlayerName}&page=${currentPage - 1}">
+                   href="${pageContext.request.contextPath}/matches?filter_by_player_name=${filter_by_player_name}&page=${currentPage - 1}">
                     &lt;
                 </a>
             </c:if>
@@ -82,7 +82,7 @@
                     </c:when>
                     <c:otherwise>
                         <a class="num-page"
-                           href="${pageContext.request.contextPath}/matches?filter_by_player_name=${filterByPlayerName}&page=${i}">
+                           href="${pageContext.request.contextPath}/matches?filter_by_player_name=${filter_by_player_name}&page=${i}">
                                 ${i}
                         </a>
                     </c:otherwise>
@@ -91,7 +91,7 @@
 
             <c:if test="${currentPage < totalPages}">
                 <a class="next"
-                   href="${pageContext.request.contextPath}/matches?filter_by_player_name=${filterByPlayerName}&page=${currentPage + 1}">
+                   href="${pageContext.request.contextPath}/matches?filter_by_player_name=${filter_by_player_name}&page=${currentPage + 1}">
                     &gt;
                 </a>
             </c:if>

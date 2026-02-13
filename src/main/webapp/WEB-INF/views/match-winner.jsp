@@ -48,15 +48,15 @@
                 <tbody>
                 <tr class="player1">
                     <td class="table-text">${ongoingMatch.playerOne.name}</td>
-                    <td class="table-text">${ongoingMatch.PlayerOneScore.getSetScore(0)}</td>
-                    <td class="table-text">${ongoingMatch.PlayerOneScore.getSetScore(1)}</td>
-                    <td class="table-text">${ongoingMatch.PlayerOneScore.getSetScore(2)}</td>
+                    <td class="table-text">${ongoingMatch.playerOneScore.getSetScore(0)}</td>
+                    <td class="table-text">${ongoingMatch.playerOneScore.getSetScore(1)}</td>
+                    <td class="table-text">${ongoingMatch.playerOneScore.getSetScore(2)}</td>
                 </tr>
                 <tr class="player2">
                     <td class="table-text">${ongoingMatch.playerTwo.name}</td>
-                    <td class="table-text">${ongoingMatch.PlayerTwoScore.getSetScore(0)}</td>
-                    <td class="table-text">${ongoingMatch.PlayerTwoScore.getSetScore(1)}</td>
-                    <td class="table-text">${ongoingMatch.PlayerTwoScore.getSetScore(3)}</td>
+                    <td class="table-text">${ongoingMatch.playerTwoScore.getSetScore(0)}</td>
+                    <td class="table-text">${ongoingMatch.playerTwoScore.getSetScore(1)}</td>
+                    <td class="table-text">${ongoingMatch.playerTwoScore.getSetScore(3)}</td>
                 </tr>
                 </tbody>
             </table>

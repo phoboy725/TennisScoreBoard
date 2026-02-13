@@ -7,6 +7,8 @@ import com.tennis.util.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 
+import java.util.Optional;
+
 public class PlayerService {
 
     private final PlayerRepository playerRepository;
@@ -34,6 +36,10 @@ public class PlayerService {
         EntityManager entityManager = EntityManagerUtil.getCurrentEntityManager();
         Player player = entityManager.find(Player.class, id);
         return player;
+    }
+
+    public Optional<Player> findPlayerByName(String name) {
+        return playerRepository.findPlayerByName(name);
     }
 
     private void safeRollback(EntityTransaction transaction, Exception originalException) {
