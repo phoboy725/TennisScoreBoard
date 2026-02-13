@@ -4,7 +4,7 @@ import com.tennis.domain.MatchState;
 
 import java.util.UUID;
 
-public record MatchResponseDto(
+public record OngoingMatchDto(
         UUID uuid,
         PlayerInfoDto playerOne,
         PlayerInfoDto playerTwo,

@@ -4,7 +4,7 @@ import com.tennis.config.ApplicationContext;
 import com.tennis.domain.OngoingMatch;
 import com.tennis.domain.PlayerScored;
 import com.tennis.dto.MatchDtoFactory;
-import com.tennis.dto.MatchResponseDto;
+import com.tennis.dto.OngoingMatchDto;
 import com.tennis.exception.MatchNotFoundException;
 import com.tennis.exception.MissingParameterException;
 import com.tennis.service.OngoingMatchService;
@@ -57,8 +57,8 @@ public class MatchScoreController extends BaseController {
             return;
         }
 
-        MatchResponseDto matchResponseDto = matchDtoFactory.fromMatch(uuid);
-        request.setAttribute(MATCH_ATTRIBUTE, matchResponseDto);
+        OngoingMatchDto ongoingMatchDto = matchDtoFactory.fromMatch(uuid);
+        request.setAttribute(MATCH_ATTRIBUTE, ongoingMatchDto);
         request.setAttribute(UUID_ATTRIBUTE, uuid);
         forwardTo(ViewsPath.MATCH_SCORE.jsp(), request, response);
 
@@ -81,15 +81,15 @@ public class MatchScoreController extends BaseController {
 
             if (ongoingMatch.isFinished()) {
 
-                MatchResponseDto matchResponseDto = matchDtoFactory.fromMatch(uuid);
-                request.setAttribute(MATCH_ATTRIBUTE, matchResponseDto);
+                OngoingMatchDto ongoingMatchDto = matchDtoFactory.fromMatch(uuid);
+                request.setAttribute(MATCH_ATTRIBUTE, ongoingMatchDto);
                 forwardTo(ViewsPath.MATCH_WINNER.jsp(), request, response);
                 ongoingMatchService.finishMatch(uuid);
                 return;
             }
 
-            MatchResponseDto matchResponseDto = matchDtoFactory.fromMatch(uuid);
-            request.setAttribute(MATCH_ATTRIBUTE, matchResponseDto);
+            OngoingMatchDto ongoingMatchDto = matchDtoFactory.fromMatch(uuid);
+            request.setAttribute(MATCH_ATTRIBUTE, ongoingMatchDto);
             redirectTo(ViewsPath.MATCH_SCORE.jsp(), Map.of(UUID_ATTRIBUTE, uuid), request, response);
 
         } catch (MatchNotFoundException e) {

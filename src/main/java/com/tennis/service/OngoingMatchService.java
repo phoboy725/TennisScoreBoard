@@ -22,14 +22,12 @@ public class OngoingMatchService {
 
     private final MatchesRepository matchesRepository;
     private final PlayerRepository playerRepository;
-    private final MatchScoreService score;
 
     private final Map<UUID, OngoingMatch> matches = new ConcurrentHashMap<>();
 
-    public OngoingMatchService(MatchesRepository matchesRepository, PlayerRepository playerRepository, MatchScoreService score) {
+    public OngoingMatchService(MatchesRepository matchesRepository, PlayerRepository playerRepository) {
         this.matchesRepository = matchesRepository;
         this.playerRepository = playerRepository;
-        this.score = score;
     }
 // !!! сделать Optional
     public OngoingMatch findMatch(UUID matchId) {
@@ -81,24 +79,6 @@ public class OngoingMatchService {
             throw new MatchNotFinishedException("Match is not finished");
         }
         return state;
-    }
-
-    public List<Match> getMatches(String filterByPlayerName, int offset, int limit) {
-        if (isPlayerFilterApplied(filterByPlayerName)) {
-            return matchesRepository.findMatchesByPlayerName(filterByPlayerName, offset, limit);
-        }
-        return matchesRepository.findAll(offset, limit);
-    }
-
-    public Long getTotalMatchesCount(String filterByPlayerName) {
-        if (isPlayerFilterApplied(filterByPlayerName)) {
-            return matchesRepository.countMatchesWithPlayerName(filterByPlayerName);
-        }
-        return matchesRepository.countAll();
-    }
-
-    private boolean isPlayerFilterApplied(String filterByPlayerName) {
-        return filterByPlayerName != null && !filterByPlayerName.isBlank();
     }
 
     private void safeRollback(EntityTransaction transaction, Exception originalException) {

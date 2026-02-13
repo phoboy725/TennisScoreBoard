@@ -1,14 +1,11 @@
 package com.tennis.dto;
 
-import com.tennis.config.ApplicationContext;
 import com.tennis.domain.OngoingMatch;
-import com.tennis.domain.PlayerScore;
 import com.tennis.entity.Match;
 import com.tennis.entity.Player;
 import com.tennis.service.OngoingMatchService;
 import com.tennis.service.PlayerService;
 
-import java.util.List;
 import java.util.UUID;
 
 public class MatchDtoFactory {
@@ -21,14 +18,14 @@ public class MatchDtoFactory {
         this.playerService = playerService;
     }
 
-    public MatchResponseDto fromMatch(UUID uuid) {
+    public OngoingMatchDto fromMatch(UUID uuid) {
 
         OngoingMatch match = ongoingMatchService.findMatch(uuid);
         Player playerOne = playerService.findPlayerById(match.getPlayerOneScore().getId());
         Player playerTwo = playerService.findPlayerById(match.getPlayerTwoScore().getId());
         Player winner = (playerOne.getId() == match.getWinnerId()) ? playerOne : playerTwo;
 
-        return new MatchResponseDto(
+        return new OngoingMatchDto(
                 uuid,
                 PlayerInfoDto.from(playerOne),
                 PlayerInfoDto.from(playerTwo),
