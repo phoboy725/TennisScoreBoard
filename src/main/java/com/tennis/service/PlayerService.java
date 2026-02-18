@@ -17,9 +17,13 @@ public class PlayerService {
         this.playerRepository = playerRepository;
     }
 
-    public Player createPlayer(String playerName) {
+    public Player getOrCreatePlayer(String playerName) {
         EntityManager entityManager = EntityManagerUtil.getCurrentEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
+        Optional<Player> foundPlayer = playerRepository.findByName(playerName);
+        if (foundPlayer.isPresent()) {
+            return foundPlayer.get();
+        }
         try {
             transaction.begin();
             Player player = new Player(playerName);
@@ -32,14 +36,12 @@ public class PlayerService {
         }
     }
 
-    public Player findPlayerById(Long id) {
-        EntityManager entityManager = EntityManagerUtil.getCurrentEntityManager();
-        Player player = entityManager.find(Player.class, id);
-        return player;
+    public Optional<Player> findPlayerById(Long id) {
+        return playerRepository.findById(id);
     }
 
     public Optional<Player> findPlayerByName(String name) {
-        return playerRepository.findPlayerByName(name);
+        return playerRepository.findByName(name);
     }
 
     private void safeRollback(EntityTransaction transaction, Exception originalException) {

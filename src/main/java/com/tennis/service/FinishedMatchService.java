@@ -3,9 +3,9 @@ package com.tennis.service;
 import com.tennis.entity.Match;
 import com.tennis.repository.MatchesRepository;
 import com.tennis.repository.PlayerRepository;
-import jakarta.persistence.EntityTransaction;
 
 import java.util.List;
+import java.util.Optional;
 
 public class FinishedMatchService {
 
@@ -15,6 +15,10 @@ public class FinishedMatchService {
     public FinishedMatchService(MatchesRepository matchesRepository, PlayerRepository playerRepository) {
         this.matchesRepository = matchesRepository;
         this.playerRepository = playerRepository;
+    }
+
+    public Optional<Match> getMatchById(Long id) {
+        return Optional.ofNullable(matchesRepository.findById(id));
     }
 
     public List<Match> getMatches(String filterByPlayerName, int offset, int limit) {

@@ -8,16 +8,16 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 
-    <script src="../../js/app.js"></script>
+    <script src="${pageContext.request.contextPath}/js/app.js"></script>
 </head>
 <body>
 <header class="header">
     <section class="nav-header">
         <div class="brand">
             <div class="nav-toggle">
-                <img src="../../images/menu.png" alt="Logo" class="logo">
+                <img src="${pageContext.request.contextPath}/images/menu.png" alt="Logo" class="logo">
             </div>
             <span class="logo-text">TennisScoreboard</span>
         </div>
@@ -36,6 +36,15 @@
             <div class="new-match-image"></div>
             <div class="form-container center">
                 <form method="post" action="${pageContext.request.contextPath}/new-match">
+                    <!-- Flash message (после redirect) -->
+                    <c:if test="${not empty sessionScope.errorMessage}">
+                        <div style="color: red;">
+                                ${fn:escapeXml(sessionScope.errorMessage)}
+                        </div>
+                        <c:remove var="errorMessage" scope="session"/>
+                    </c:if>
+
+                    <!-- Ошибки валидации формы -->
                     <c:if test="${not empty errors}">
                         <ul style="color: red;">
                             <c:forEach var="error" items="${errors}">

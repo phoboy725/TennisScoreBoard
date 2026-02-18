@@ -1,5 +1,6 @@
 package com.tennis.controller;
 
+import com.tennis.exception.MissingParameterException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,6 +19,13 @@ public class BaseController extends HttpServlet {
     private static final String PARAMETER_DELIMITER = "&";
     private static final String JSP_SUB_PATH = "/WEB-INF/views" + PATH_DELIMITER;
     private static final String JSP_EXTENSION = ".jsp";
+    private static final String NOT_EXIST = "Match doesn't exist - create new match";
+
+
+    protected void redirectToNewMatchWithMessage(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        request.getSession().setAttribute("errorMessage", NOT_EXIST);
+        redirectTo(ViewsPath.NEW_MATCH.jsp(), Map.of(), request, response);
+    }
 
     protected void forwardTo(
             String pageName,
@@ -70,4 +78,13 @@ public class BaseController extends HttpServlet {
     private String encodeForUrl(String raw) {
         return URLEncoder.encode(raw, StandardCharsets.UTF_8);
     }
+
+    String getRequiredParameter(HttpServletRequest request, String paramName) {
+        String value = request.getParameter(paramName);
+        if (value == null || value.isBlank()) {
+            throw new MissingParameterException("Missing " + paramName);
+        }
+        return value;
+    }
+
 }

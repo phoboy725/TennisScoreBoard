@@ -46,8 +46,8 @@ public class NewMatchController extends BaseController {
         List<String> checkPlayersNames = PlayerNamesValidation.check(playerOneName, playerTwoName);
 
         if (checkPlayersNames.isEmpty()) {
-            Player playerOne = playerService.createPlayer(playerOneName);
-            Player playerTwo = playerService.createPlayer(playerTwoName);
+            Player playerOne = playerService.getOrCreatePlayer(playerOneName);
+            Player playerTwo = playerService.getOrCreatePlayer(playerTwoName);
             String uuid = ongoingMatchService.createMatch(playerOne.getId(), playerTwo.getId()).toString();
             redirectTo(ViewsPath.MATCH_SCORE.jsp(), Map.of(UUID_ATTRIBUTE, uuid), request, response);
         } else {

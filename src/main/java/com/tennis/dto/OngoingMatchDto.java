@@ -2,10 +2,7 @@ package com.tennis.dto;
 
 import com.tennis.domain.MatchState;
 
-import java.util.UUID;
-
 public record OngoingMatchDto(
-        UUID uuid,
         PlayerInfoDto playerOne,
         PlayerInfoDto playerTwo,
         PlayerScoreDto playerOneScore,

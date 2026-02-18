@@ -25,6 +25,10 @@ public record PlayerScoreDto(
         );
     }
 
+    public String displayPoints() {
+        return tieBreakPoints > 0 ? String.valueOf(tieBreakPoints) : points;
+    }
+
     public String getSetScore(int index) {
         if (setsResult == null
                 || index < 0
@@ -34,5 +38,6 @@ public record PlayerScoreDto(
         }
         return String.valueOf(setsResult.get(index));
     }
+
 }
 

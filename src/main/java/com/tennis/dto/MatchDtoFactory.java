@@ -3,30 +3,29 @@ package com.tennis.dto;
 import com.tennis.domain.OngoingMatch;
 import com.tennis.entity.Match;
 import com.tennis.entity.Player;
+import com.tennis.service.FinishedMatchService;
 import com.tennis.service.OngoingMatchService;
 import com.tennis.service.PlayerService;
-
-import java.util.UUID;
 
 public class MatchDtoFactory {
 
     private final OngoingMatchService ongoingMatchService;
+    private final FinishedMatchService finishedMatchService;
     private final PlayerService playerService;
 
-    public MatchDtoFactory(OngoingMatchService ongoingMatchService, PlayerService playerService) {
+    public MatchDtoFactory(OngoingMatchService ongoingMatchService, FinishedMatchService finishedMatchService, PlayerService playerService) {
         this.ongoingMatchService = ongoingMatchService;
+        this.finishedMatchService = finishedMatchService;
         this.playerService = playerService;
     }
 
-    public OngoingMatchDto fromMatch(UUID uuid) {
+    public OngoingMatchDto fromMatch(OngoingMatch match) {
 
-        OngoingMatch match = ongoingMatchService.findMatch(uuid);
-        Player playerOne = playerService.findPlayerById(match.getPlayerOneScore().getId());
-        Player playerTwo = playerService.findPlayerById(match.getPlayerTwoScore().getId());
+        Player playerOne = (playerService.findPlayerById(match.getPlayerOneScore().getId())).get();
+        Player playerTwo = (playerService.findPlayerById(match.getPlayerTwoScore().getId())).get();
         Player winner = (playerOne.getId() == match.getWinnerId()) ? playerOne : playerTwo;
 
         return new OngoingMatchDto(
-                uuid,
                 PlayerInfoDto.from(playerOne),
                 PlayerInfoDto.from(playerTwo),
                 PlayerScoreDto.from(match.getPlayerOneScore()),

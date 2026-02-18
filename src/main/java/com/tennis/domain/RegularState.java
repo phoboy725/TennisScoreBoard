@@ -8,6 +8,7 @@ final class RegularState implements MatchState {
 
     @Override
     public void addPoint(OngoingMatch ongoingMatch, PlayerScored playerScored) {
+
         PlayerScore winner = ongoingMatch.winnerOfPoint(playerScored);
         PlayerScore loser  = ongoingMatch.loserOfPoint(playerScored);
 
@@ -61,11 +62,9 @@ final class RegularState implements MatchState {
     private void winSet(OngoingMatch ongoingMatch, PlayerScore winner, PlayerScore loser) {
         winner.incrementSets();
 
-        // ✅ сохраняем результат сета (например 6:3 или 7:5)
         winner.addSetResult(winner.getGames());
         loser.addSetResult(loser.getGames());
 
-        // reset for next set
         winner.resetGames();
         loser.resetGames();
         winner.resetPoints();

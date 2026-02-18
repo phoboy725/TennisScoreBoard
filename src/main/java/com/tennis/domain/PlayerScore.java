@@ -25,10 +25,6 @@ public final class PlayerScore {
         return points;
     }
 
-    public String getPointsDisplay() {
-        return points.getDisplayValue();
-    }
-
     public int getGames() {
         return games;
     }
@@ -41,7 +37,6 @@ public final class PlayerScore {
         return tieBreakPoints;
     }
 
-    // чтобы JSP мог читать, но не менять список
     public List<Integer> getSetsResult() {
         return Collections.unmodifiableList(setsResult);
     }
@@ -53,8 +48,6 @@ public final class PlayerScore {
     public boolean isForty() {
         return points == TennisPoint.FORTY;
     }
-
-    // ===== package-private mutators for states =====
 
     void setPoints(TennisPoint newPoints) {
         this.points = newPoints;

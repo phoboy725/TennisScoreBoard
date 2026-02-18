@@ -10,16 +10,16 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 
-    <script src="js/app.js"></script>
+    <script src="${pageContext.request.contextPath}/js/app.js"></script>
 </head>
 <body>
 <header class="header">
     <section class="nav-header">
         <div class="brand">
             <div class="nav-toggle">
-                <img src="images/menu.png" alt="Logo" class="logo">
+                <img src="${pageContext.request.contextPath}/images/menu.png" alt="Logo" class="logo">
             </div>
             <span class="logo-text">TennisScoreboard</span>
         </div>
@@ -50,7 +50,7 @@
                     <td class="table-text">${ongoingMatch.playerOne.name}</td>
                     <td class="table-text">${ongoingMatch.playerOneScore.sets}</td>
                     <td class="table-text">${ongoingMatch.playerOneScore.games}</td>
-                    <td class="table-text">${ongoingMatch.playerOneScore.points}</td>
+                    <td class="table-text">${ongoingMatch.playerOneScore.displayPoints}</td>
                     <td class="table-text">
                         <form method="post" action="${pageContext.request.contextPath}/match-score?uuid=${uuid}">
                             <input type="hidden" name="playerScored" value="ONE" />
@@ -62,7 +62,7 @@
                     <td class="table-text">${ongoingMatch.playerTwo.name}</td>
                     <td class="table-text">${ongoingMatch.playerTwoScore.sets}</td>
                     <td class="table-text">${ongoingMatch.playerTwoScore.games}</td>
-                    <td class="table-text">${ongoingMatch.playerTwoScore.points}</td>
+                    <td class="table-text">${ongoingMatch.playerTwoScore.displayPoints}</td>
                     <td class="table-text">
                         <form method="post" action="${pageContext.request.contextPath}/match-score?uuid=${uuid}">
                             <input type="hidden" name="playerScored" value="TWO" />

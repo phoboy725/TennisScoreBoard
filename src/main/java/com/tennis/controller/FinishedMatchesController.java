@@ -39,7 +39,7 @@ public class FinishedMatchesController extends BaseController {
         this.finishedMatchService = ApplicationContext.finishedMatchService();
         this.ongoingMatchService = ApplicationContext.ongoingMatchService();
         this.playerService = ApplicationContext.playerService();
-        this.matchDtoFactory = new MatchDtoFactory(ongoingMatchService, playerService);
+        this.matchDtoFactory = new MatchDtoFactory(ongoingMatchService, finishedMatchService, playerService);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {

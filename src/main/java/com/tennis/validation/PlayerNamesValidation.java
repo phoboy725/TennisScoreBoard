@@ -12,7 +12,6 @@ public class PlayerNamesValidation {
     private static final Pattern NAME_PATTERN = Pattern.compile("^[а-яА-яa-zA-Z'\\-\\s]{2,30}$");
     private static final String EMPTY_NAME = "Names can not be empty";
     private static final String NOT_UNIQUE_NAME = "Names must be unique";
-    private static final String EXISTING_NAME = "Player with this name already exists: ";
     private static final String WRONG_CHARS_NAME  = "Names must be 2 to 30 characters long, using only letters, \" ' \", \" - \" and space";
 
     private static PlayerService playerService = ApplicationContext.playerService();
@@ -35,12 +34,6 @@ public class PlayerNamesValidation {
         }
         if (!NAME_PATTERN.matcher(playerOneNameStripped).matches() || !NAME_PATTERN.matcher(playerTwoNameStripped).matches()) {
             errors.add(WRONG_CHARS_NAME);
-        }
-        if (!playerService.findPlayerByName(playerOneNameStripped).isEmpty()) {
-            errors.add(EXISTING_NAME + playerOneNameStripped);
-        }
-        if (!playerService.findPlayerByName(playerTwoNameStripped).isEmpty()) {
-            errors.add(EXISTING_NAME + playerTwoNameStripped);
         }
         return errors;
     }

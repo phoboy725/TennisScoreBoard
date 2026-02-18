@@ -20,11 +20,9 @@ final class TieBreakState implements MatchState {
 
             winner.incrementSets();
 
-            // ✅ tie-break set result always 7:6
             winner.addSetResult(7);
             loser.addSetResult(6);
 
-            // reset for next set
             winner.resetTieBreakPoints();
             loser.resetTieBreakPoints();
 

@@ -22,8 +22,6 @@ public final class OngoingMatch {
         state.addPoint(this, playerScored);
     }
 
-    // ===== package-private helpers for states =====
-
     PlayerScore winnerOfPoint(PlayerScored who) {
         return who == PlayerScored.ONE ? playerOneScore : playerTwoScore;
     }
@@ -31,9 +29,6 @@ public final class OngoingMatch {
     PlayerScore loserOfPoint(PlayerScored who) {
         return who == PlayerScored.ONE ? playerTwoScore : playerOneScore;
     }
-
-    PlayerScore p1() { return playerOneScore; }
-    PlayerScore p2() { return playerTwoScore; }
 
     void setState(MatchState newState) {
         this.state = Objects.requireNonNull(newState, "newState");
@@ -52,14 +47,8 @@ public final class OngoingMatch {
         return winnerId;
     }
 
-    // (опционально) для UI
-    public boolean isTieBreak() {
-        return state instanceof TieBreakState;
-    }
-
     public PlayerScore getPlayerOneScore() { return playerOneScore; }
     public PlayerScore getPlayerTwoScore() { return playerTwoScore; }
-
 
     public MatchState getState() { return this.state;}
 }

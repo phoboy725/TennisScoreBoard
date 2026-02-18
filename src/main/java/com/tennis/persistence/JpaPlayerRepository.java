@@ -25,13 +25,13 @@ public class JpaPlayerRepository implements PlayerRepository {
             SELECT_ALL_JPQL + FILTER_BY_NAME_JPQL;
 
     @Override
-    public Player findById(Long id) {
+    public Optional<Player> findById(Long id) {
         EntityManager entityManager = EntityManagerUtil.getCurrentEntityManager();
-        return entityManager.find(Player.class, id);
+        return Optional.ofNullable(entityManager.find(Player.class, id));
     }
 
     @Override
-    public Optional<Player> findPlayerByName(String name) {
+    public Optional<Player> findByName(String name) {
         EntityManager entityManager = EntityManagerUtil.getCurrentEntityManager();
         try {
             Player player = entityManager.createQuery(FIND_BY_NAME_JPQL, Player.class)

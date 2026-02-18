@@ -10,16 +10,16 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 
-    <script src="js/app.js"></script>
+    <script src="${pageContext.request.contextPath}/js/app.js"></script>
 </head>
 <body>
 <header class="header">
     <section class="nav-header">
         <div class="brand">
             <div class="nav-toggle">
-                <img src="images/menu.png" alt="Logo" class="logo">
+                <img src="${pageContext.request.contextPath}/images/menu.png" alt="Logo" class="logo">
             </div>
             <span class="logo-text">TennisScoreboard</span>
         </div>
@@ -33,7 +33,7 @@
 </header>
 <main>
     <div class="container">
-        <h1>Current match is finished! The winner is ${winnerName} </h1>
+        <h1>Current match is finished! The winner is ${finishedMatch.winner.name} </h1>
         <div class="current-match-image"></div>
         <section class="score">
             <table class="table">
@@ -47,16 +47,16 @@
                 </thead>
                 <tbody>
                 <tr class="player1">
-                    <td class="table-text">${ongoingMatch.playerOne.name}</td>
-                    <td class="table-text">${ongoingMatch.playerOneScore.getSetScore(0)}</td>
-                    <td class="table-text">${ongoingMatch.playerOneScore.getSetScore(1)}</td>
-                    <td class="table-text">${ongoingMatch.playerOneScore.getSetScore(2)}</td>
+                    <td class="table-text">${finishedMatch.playerOne.name}</td>
+                    <td class="table-text">${finishedMatch.playerOneScore.getSetScore(0)}</td>
+                    <td class="table-text">${finishedMatch.playerOneScore.getSetScore(1)}</td>
+                    <td class="table-text">${finishedMatch.playerOneScore.getSetScore(2)}</td>
                 </tr>
                 <tr class="player2">
-                    <td class="table-text">${ongoingMatch.playerTwo.name}</td>
-                    <td class="table-text">${ongoingMatch.playerTwoScore.getSetScore(0)}</td>
-                    <td class="table-text">${ongoingMatch.playerTwoScore.getSetScore(1)}</td>
-                    <td class="table-text">${ongoingMatch.playerTwoScore.getSetScore(3)}</td>
+                    <td class="table-text">${finishedMatch.playerTwo.name}</td>
+                    <td class="table-text">${finishedMatch.playerTwoScore.getSetScore(0)}</td>
+                    <td class="table-text">${finishedMatch.playerTwoScore.getSetScore(1)}</td>
+                    <td class="table-text">${finishedMatch.playerTwoScore.getSetScore(2)}</td>
                 </tr>
                 </tbody>
             </table>
