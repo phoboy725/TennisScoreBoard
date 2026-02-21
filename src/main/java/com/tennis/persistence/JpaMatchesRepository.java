@@ -1,10 +1,10 @@
 package com.tennis.persistence;
 
-import com.tennis.entity.Player;
 import com.tennis.exception.DatabaseException;
 import com.tennis.entity.Match;
 import com.tennis.repository.MatchesRepository;
 import com.tennis.util.EntityManagerUtil;
+
 import jakarta.persistence.EntityManager;
 
 import java.util.List;
@@ -79,8 +79,7 @@ public class JpaMatchesRepository implements MatchesRepository {
         try {
             Long count = entityManager.createQuery(COUNT_WITH_NAME_JPQL, Long.class)
                     .setParameter("name", "%" + playerNameFilter + "%")
-                    .getSingleResult()
-                    .longValue();
+                    .getSingleResult();
             return count;
         } catch (Exception e) {
             throw new DatabaseException("Failed to count matches", e);

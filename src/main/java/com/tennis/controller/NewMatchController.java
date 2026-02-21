@@ -5,6 +5,7 @@ import com.tennis.entity.Player;
 import com.tennis.service.OngoingMatchService;
 import com.tennis.service.PlayerService;
 import com.tennis.validation.PlayerNamesValidation;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -55,7 +56,6 @@ public class NewMatchController extends BaseController {
             request.setAttribute(PLAYER_TWO_ATTRIBUTE, playerTwoName);
             request.setAttribute(ERRORS_ATTRIBUTE, checkPlayersNames);
             forwardTo(ViewsPath.NEW_MATCH.jsp(), request, response);
-
         }
     }
 }

@@ -1,4 +1,3 @@
-
 package com.tennis.domain;
 
 import java.util.Objects;
@@ -18,7 +17,6 @@ public final class OngoingMatch {
     }
 
     public void pointWonBy(PlayerScored playerScored) {
-        Objects.requireNonNull(playerScored, "playerScored");
         state.addPoint(this, playerScored);
     }
 
@@ -42,6 +40,8 @@ public final class OngoingMatch {
     public boolean isFinished() {
         return winnerId != null;
     }
+
+    public boolean isTieBreak() { return  state instanceof TieBreakState;}
 
     public Long getWinnerId() {
         return winnerId;

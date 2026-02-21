@@ -7,9 +7,11 @@ import com.tennis.dto.MatchDtoFactory;
 import com.tennis.dto.MatchUpdateDto;
 import com.tennis.dto.OngoingMatchDto;
 import com.tennis.exception.MatchNotFoundException;
+import com.tennis.exception.MissingParameterException;
 import com.tennis.service.FinishedMatchService;
 import com.tennis.service.OngoingMatchService;
 import com.tennis.service.PlayerService;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,9 +27,11 @@ public class MatchScoreController extends BaseController {
 
     private static final String MATCH_ATTRIBUTE = "ongoingMatch";
     private static final String UUID_ATTRIBUTE = "uuid";
+    private static final String FINISHED_MATCH_ATTRIBUTE = "finishedMatch";
     private static final String PLAYER_SCORED_PARAM = "playerScored";
     private static final String UUID_PARAM = "uuid";
-    private static final String WINNER_SNAPSHOT = "winnerSnapshot";
+    private static final String NOT_EXIST = "Match doesn't exist - please create a new one";
+    private static final String WRONG_UUID = "Error in UUID - please create a new match";
     private PlayerService playerService;
     private OngoingMatchService ongoingMatchService;
     private FinishedMatchService finishedMatchService;
@@ -41,52 +45,53 @@ public class MatchScoreController extends BaseController {
         this.matchDtoFactory = new MatchDtoFactory(ongoingMatchService, finishedMatchService, playerService);
     }
 
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        UUID uuid = UUID.fromString(getRequiredParameter(request, UUID_PARAM));
-        Optional<OngoingMatch> ongoingMatch = ongoingMatchService.findMatch(uuid);
+        try {
 
-        if (ongoingMatch.isEmpty()) {
-            redirectToNewMatchWithMessage(request, response);
-            return;
+            UUID uuid = getUuidParameter(request, UUID_PARAM);
+            OngoingMatch ongoingMatch = ongoingMatchService.getMatchOrThrow(uuid);
+
+            OngoingMatchDto ongoingMatchDto = matchDtoFactory.fromMatch(ongoingMatch);
+            request.setAttribute(MATCH_ATTRIBUTE, ongoingMatchDto);
+            request.setAttribute(UUID_ATTRIBUTE, uuid);
+            forwardTo(ViewsPath.MATCH_SCORE.jsp(), request, response);
+
+        } catch (MissingParameterException e) {
+            errorRedirect(ViewsPath.NEW_MATCH.jsp(), WRONG_UUID, request, response);
+        } catch (MatchNotFoundException e) {
+            errorRedirect(ViewsPath.NEW_MATCH.jsp(), NOT_EXIST, request, response);
         }
-
-        OngoingMatchDto ongoingMatchDto = matchDtoFactory.fromMatch(ongoingMatch.get());
-        request.setAttribute(MATCH_ATTRIBUTE, ongoingMatchDto);
-        request.setAttribute(UUID_ATTRIBUTE, uuid);
-        forwardTo(ViewsPath.MATCH_SCORE.jsp(), request, response);
-
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
-        UUID uuid = UUID.fromString(getRequiredParameter(request, UUID_PARAM));
-        PlayerScored playerScored = PlayerScored.from(getRequiredParameter(request, PLAYER_SCORED_PARAM));
-
         try {
 
+            UUID uuid = getUuidParameter(request, UUID_PARAM);
+            PlayerScored playerScored = PlayerScored.from(getRequiredParameter(request, PLAYER_SCORED_PARAM));
+
             MatchUpdateDto updateDto = ongoingMatchService.updateScoreAndFinishMatchIfNeeded(uuid, playerScored);
+            OngoingMatchDto ongoingMatchDto = matchDtoFactory.fromMatch(updateDto.ongoingMatch());
 
-            if (updateDto.finished()) {
+            if (updateDto.ongoingMatch().isFinished()) {
 
-                OngoingMatchDto finishedMatchSnapshot = matchDtoFactory.fromMatch(updateDto.ongoingMatch());
-                request.getSession().setAttribute(WINNER_SNAPSHOT, finishedMatchSnapshot);
+                request.getSession().setAttribute(FINISHED_MATCH_ATTRIBUTE, ongoingMatchDto);
                 redirectTo(ViewsPath.MATCH_WINNER.jsp(), Map.of(), request, response);
-                return;
+
+            } else {
+
+                request.setAttribute(MATCH_ATTRIBUTE, ongoingMatchDto);
+                redirectTo(ViewsPath.MATCH_SCORE.jsp(), Map.of(UUID_ATTRIBUTE, uuid), request, response);
+
             }
 
-            OngoingMatchDto ongoingMatchDto = matchDtoFactory.fromMatch(updateDto.ongoingMatch());
-            request.setAttribute(MATCH_ATTRIBUTE, ongoingMatchDto);
-            redirectTo(ViewsPath.MATCH_SCORE.jsp(), Map.of(UUID_ATTRIBUTE, uuid), request, response);
-
+        } catch (MissingParameterException e) {
+            errorRedirect(ViewsPath.NEW_MATCH.jsp(), WRONG_UUID, request, response);
         } catch (MatchNotFoundException e) {
-
-            redirectTo(ViewsPath.MATCH_WINNER.jsp(), Map.of(), request, response);
+            errorRedirect(ViewsPath.NEW_MATCH.jsp(), NOT_EXIST, request, response);
         }
-
     }
-
 }

@@ -39,7 +39,7 @@
                     <!-- Flash message (после redirect) -->
                     <c:if test="${not empty sessionScope.errorMessage}">
                         <div style="color: red;">
-                                ${fn:escapeXml(sessionScope.errorMessage)}
+                            <li>${fn:escapeXml(sessionScope.errorMessage)}</li>
                         </div>
                         <c:remove var="errorMessage" scope="session"/>
                     </c:if>

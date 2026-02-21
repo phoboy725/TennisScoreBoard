@@ -41,4 +41,3 @@ final class TieBreakState implements MatchState {
         }
     }
 }
-

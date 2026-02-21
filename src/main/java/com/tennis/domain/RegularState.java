@@ -10,7 +10,7 @@ final class RegularState implements MatchState {
     public void addPoint(OngoingMatch ongoingMatch, PlayerScored playerScored) {
 
         PlayerScore winner = ongoingMatch.winnerOfPoint(playerScored);
-        PlayerScore loser  = ongoingMatch.loserOfPoint(playerScored);
+        PlayerScore loser = ongoingMatch.loserOfPoint(playerScored);
 
         applyRegularPoint(ongoingMatch, winner, loser);
     }

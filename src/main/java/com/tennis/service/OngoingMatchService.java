@@ -10,6 +10,7 @@ import com.tennis.entity.Player;
 import com.tennis.repository.MatchesRepository;
 import com.tennis.repository.PlayerRepository;
 import com.tennis.util.EntityManagerUtil;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 
@@ -23,6 +24,8 @@ public class OngoingMatchService {
     private final MatchesRepository matchesRepository;
     private final PlayerRepository playerRepository;
 
+    private static final int MAX_MATCHES = 100;
+
     private final Map<UUID, OngoingMatch> matches = new ConcurrentHashMap<>();
 
     public OngoingMatchService(MatchesRepository matchesRepository, PlayerRepository playerRepository) {
@@ -30,43 +33,46 @@ public class OngoingMatchService {
         this.playerRepository = playerRepository;
     }
 
+    public OngoingMatch getMatchOrThrow(UUID matchId) {
+        return findMatch(matchId)
+                .orElseThrow(() -> new MatchNotFoundException("Match not found: " + matchId));
+    }
+
     public Optional<OngoingMatch> findMatch(UUID matchId) {
         return Optional.ofNullable(matches.get(matchId));
     }
 
     public UUID createMatch(Long playerOneId, Long playerTwoId) {
+
+        if (matches.size() >= MAX_MATCHES) {
+            matches.entrySet().removeIf(entry -> entry.getValue().isFinished());
+        }
+
         UUID uuid = UUID.randomUUID();
         matches.put(uuid, new OngoingMatch(playerOneId, playerTwoId));
         return uuid;
+
     }
 
     public MatchUpdateDto updateScoreAndFinishMatchIfNeeded(UUID matchId, PlayerScored playerScored) {
 
-        class Holder {
-            OngoingMatch match;
-            boolean finished;
-        }
-
-        Holder holder = new Holder();
-
-        matches.compute(matchId, (k, v) -> {
-            if (v == null) {
-                throw new MatchNotFoundException("Match not found: " + matchId);
-            }
-
-            v.pointWonBy(playerScored);
-
-            holder.match = v;
-            holder.finished = v.isFinished() && v.getWinnerId() != null;
-
-            return holder.finished ? null : v;
+        OngoingMatch ongoingMatch = matches.computeIfPresent(matchId, (uuid, match) -> {
+            match.pointWonBy(playerScored);
+            return match;
         });
 
-        if (holder.finished) {
-            persistFinishedMatch(holder.match);
+        if (ongoingMatch == null) {
+            throw new MatchNotFoundException("Match not found: " + matchId);
         }
 
-        return new MatchUpdateDto(holder.match, holder.finished);
+        if (ongoingMatch.isFinished()) {
+
+            persistFinishedMatch(ongoingMatch);
+
+        }
+
+        MatchUpdateDto dto = new MatchUpdateDto(matchId, ongoingMatch);
+        return dto;
     }
 
     public Match persistFinishedMatch(OngoingMatch ongoingMatch) {

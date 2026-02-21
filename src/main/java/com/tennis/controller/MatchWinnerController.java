@@ -3,9 +3,11 @@ package com.tennis.controller;
 import com.tennis.config.ApplicationContext;
 import com.tennis.dto.MatchDtoFactory;
 import com.tennis.dto.OngoingMatchDto;
+import com.tennis.exception.MissingParameterException;
 import com.tennis.service.FinishedMatchService;
 import com.tennis.service.OngoingMatchService;
 import com.tennis.service.PlayerService;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -36,18 +38,21 @@ public class MatchWinnerController extends BaseController {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        Object snapshotObj = request.getSession().getAttribute(WINNER_SNAPSHOT);
+        OngoingMatchDto finishedMatchDto;
 
-        if (snapshotObj == null) {
-            redirectToNewMatchWithMessage(request, response);
-            return;
+        try {
+
+            finishedMatchDto = (OngoingMatchDto) request.getSession().getAttribute(FINISHED_MATCH_ATTRIBUTE);
+
+        } catch (MissingParameterException e) {
+            throw new MissingParameterException("Missing parameter " + e);
         }
 
-        OngoingMatchDto snapshot = (OngoingMatchDto) snapshotObj;
+        request.setAttribute(FINISHED_MATCH_ATTRIBUTE, finishedMatchDto);
+        forwardTo(ViewsPath.MATCH_WINNER.jsp(), request, response);
 
         request.getSession().removeAttribute(WINNER_SNAPSHOT);
-        request.setAttribute(FINISHED_MATCH_ATTRIBUTE, snapshot);
-        forwardTo(ViewsPath.MATCH_WINNER.jsp(), request, response);
+
     }
 }
 

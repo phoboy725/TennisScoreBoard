@@ -25,9 +25,7 @@ public class ApplicationContext {
         return FINISHED_MATCH_SERVICE;
     }
 
-    public static OngoingMatchService ongoingMatchService() {
-        return ONGOING_MATCH_SERVICE;
-    }
+    public static OngoingMatchService ongoingMatchService() { return ONGOING_MATCH_SERVICE; }
 
     public static PlayerService playerService() {
         return PLAYER_SERVICE;

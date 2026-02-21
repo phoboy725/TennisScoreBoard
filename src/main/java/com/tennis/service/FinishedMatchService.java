@@ -5,7 +5,6 @@ import com.tennis.repository.MatchesRepository;
 import com.tennis.repository.PlayerRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 public class FinishedMatchService {
 
@@ -15,10 +14,6 @@ public class FinishedMatchService {
     public FinishedMatchService(MatchesRepository matchesRepository, PlayerRepository playerRepository) {
         this.matchesRepository = matchesRepository;
         this.playerRepository = playerRepository;
-    }
-
-    public Optional<Match> getMatchById(Long id) {
-        return Optional.ofNullable(matchesRepository.findById(id));
     }
 
     public List<Match> getMatches(String filterByPlayerName, int offset, int limit) {
@@ -38,7 +33,6 @@ public class FinishedMatchService {
     private boolean isPlayerFilterApplied(String filterByPlayerName) {
         return filterByPlayerName != null && !filterByPlayerName.isBlank();
     }
-
 }
 
 

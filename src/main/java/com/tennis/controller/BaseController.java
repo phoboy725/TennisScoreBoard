@@ -1,6 +1,7 @@
 package com.tennis.controller;
 
 import com.tennis.exception.MissingParameterException;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -10,6 +11,7 @@ import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class BaseController extends HttpServlet {
@@ -19,12 +21,16 @@ public class BaseController extends HttpServlet {
     private static final String PARAMETER_DELIMITER = "&";
     private static final String JSP_SUB_PATH = "/WEB-INF/views" + PATH_DELIMITER;
     private static final String JSP_EXTENSION = ".jsp";
-    private static final String NOT_EXIST = "Match doesn't exist - create new match";
+    private static final String ERROR_ATTRIBUTE = "errorMessage";
 
-
-    protected void redirectToNewMatchWithMessage(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        request.getSession().setAttribute("errorMessage", NOT_EXIST);
-        redirectTo(ViewsPath.NEW_MATCH.jsp(), Map.of(), request, response);
+    protected void errorRedirect(
+            String subPath,
+            String message,
+            HttpServletRequest request,
+            HttpServletResponse response
+    ) throws IOException {
+        request.getSession().setAttribute(ERROR_ATTRIBUTE, message);
+        response.sendRedirect(request.getContextPath() + PATH_DELIMITER + subPath);
     }
 
     protected void forwardTo(
@@ -43,7 +49,6 @@ public class BaseController extends HttpServlet {
             HttpServletRequest request,
             HttpServletResponse response
     ) throws IOException {
-
         String parameters = buildParameters(requestParameters);
         response.sendRedirect(request.getContextPath() + PATH_DELIMITER + subPath + parameters);
     }
@@ -87,4 +92,11 @@ public class BaseController extends HttpServlet {
         return value;
     }
 
+    UUID getUuidParameter(HttpServletRequest request, String paramName) {
+        String value = getRequiredParameter(request, paramName);
+        if (!value.matches("^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$")) {
+            throw new MissingParameterException("Missing " + paramName);
+        }
+        return UUID.fromString(value);
+    }
 }
