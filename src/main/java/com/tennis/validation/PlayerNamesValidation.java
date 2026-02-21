@@ -1,8 +1,5 @@
 package com.tennis.validation;
 
-import com.tennis.config.ApplicationContext;
-import com.tennis.service.PlayerService;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;

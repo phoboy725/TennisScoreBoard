@@ -25,18 +25,17 @@ class OngoingMatchScoringTest {
         }
     }
 
-    /**
-     * Быстрая победа в гейме без deuce: 4 очка подряд одному игроку (второй остаётся на LOVE).
-     */
+
+//    Быстрая победа в гейме без deuce: 4 очка подряд одному игроку (второй остаётся на LOVE).
+
     private static void winGameSimple(OngoingMatch ongoingMatch, PlayerScored who) {
         points(ongoingMatch, who, 4);
         assertEquals(TennisPoint.LOVE, p1(ongoingMatch).getPoints(), "После гейма очки P1 должны сбрасываться в LOVE");
         assertEquals(TennisPoint.LOVE, p2(ongoingMatch).getPoints(), "После гейма очки P2 должны сбрасываться в LOVE");
     }
 
-    /**
-     * Быстрая победа в сете 6:0 без tie-break.
-     */
+//    Быстрая победа в сете 6:0 без tie-break.
+
     private static void winSet6_0(OngoingMatch ongoingMatch, PlayerScored who) {
         for (int i = 0; i < 6; i++) {
             winGameSimple(ongoingMatch, who);

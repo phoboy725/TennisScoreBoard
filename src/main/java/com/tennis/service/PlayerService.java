@@ -41,10 +41,6 @@ public class PlayerService {
         return playerRepository.findById(id);
     }
 
-    public Optional<Player> findPlayerByName(String name) {
-        return playerRepository.findByName(name);
-    }
-
     private void safeRollback(EntityTransaction transaction, Exception originalException) {
         if (transaction != null && transaction.isActive()) {
             try {
